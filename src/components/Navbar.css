@@ -47,6 +47,9 @@
   letter-spacing: -0.5px;
   white-space: nowrap;
 }
+.navbar-marca:hover {
+  color: var(--texto-principal);
+}
 .navbar-simbolo {
   display: grid;
   place-items: center;
