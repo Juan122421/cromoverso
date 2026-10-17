@@ -1,0 +1,55 @@
+:root {
+  --ancho-contenido: 80rem; 
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo-pagina);
+  font-family: var(--fuente-rubik);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--texto-principal);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--fuente-unbounded);
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+a {
+  color: var(--texto-marca);
+}
+a:hover {
+  color: var(--marca-primario-hover);
+}
+
+.contenedor {
+  width: calc(100% - 2rem);
+  max-width: var(--ancho-contenido);
+  margin-inline: auto;
+}
