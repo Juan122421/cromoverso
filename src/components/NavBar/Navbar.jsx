@@ -1,43 +1,42 @@
 import { useEffect, useRef, useState } from "react";
 import "./Navbar.css";
-import Icono from "./Icono.jsx";
-import Boton from "./Boton.jsx";
+import Icono from "../Icono/Icono.jsx";
+import Boton from "../Boton/Boton.jsx";
+import MenuMovil from "../MenuMovil/MenuMovil.jsx";
+import { usePreferencias } from "../../context/PreferenciasContext.jsx";
 
-// Añade aquí los enlaces nuevos cuando la API los envíe (el orden es el del menú)
 const DESTINOS = {
     inicio: "#inicio",
     mundos: "#mundos",
 };
 
-const Navbar = ({
-    textos, cargando, error, recargar,
-    idioma, onBuscar, textoGrande, alternarTexto, cambiarIdioma, activo,
-}) => {
-    const [abierto, setAbierto] = useState(false); // menú móvil abierto o cerrado
+// Provisional: cuando haya enrutamiento real, la sección activa sale de la ruta
+function leerSeccion() {
+    return window.location.hash.slice(1) || "inicio";
+}
+
+const Navbar = () => {
+    const {
+        textos, cargando, error, recargar,
+        idioma, cambiarIdioma, textoGrande, alternarTexto,
+    } = usePreferencias();
+    const [activo, setActivo] = useState(leerSeccion);
+    const [abierto, setAbierto] = useState(false);
     const [busqueda, setBusqueda] = useState("");
     const botonMenu = useRef(null);
     const campoBusqueda = useRef(null);
     const nav = textos?.navbar;
     const ingles = idioma === "en";
-
     const abrir = textos?.menuMovil?.abrir ?? (ingles ? "Open menu" : "Abrir menú");
     const cerrar = textos?.menuMovil?.cerrar ?? (ingles ? "Close menu" : "Cerrar menú");
-
-    // Se recorre DESTINOS para respetar el orden del diseño
     const enlaces = Object.keys(DESTINOS).filter((clave) => nav?.enlaces?.[clave]);
 
-    // Escape cierra el menú móvil y devuelve el foco al botón
+
     useEffect(() => {
-        if (!abierto) return;
-        function cerrarConEscape(evento) {
-            if (evento.key === "Escape") {
-                setAbierto(false);
-                botonMenu.current?.focus();
-            }
-        }
-        document.addEventListener("keydown", cerrarConEscape);
-        return () => document.removeEventListener("keydown", cerrarConEscape);
-    }, [abierto]);
+        const actualizar = () => setActivo(leerSeccion());
+        window.addEventListener("hashchange", actualizar);
+        return () => window.removeEventListener("hashchange", actualizar);
+    }, []);
 
     function abrirBusqueda() {
         setAbierto(true);
@@ -48,7 +47,7 @@ const Navbar = ({
         evento.preventDefault();
         const consulta = busqueda.trim();
         if (!consulta) return;
-        onBuscar?.(consulta); // la búsqueda aún no está conectada
+       // La busqueda la conectamos más adelante
         setAbierto(false);
     }
 
@@ -73,24 +72,22 @@ const Navbar = ({
                 {/* Acciones del navbar móvil */}
                 <div className="navbar-movil-acciones">
                     <button
-                        type="button"
-                        className="navbar-icono"
-                        aria-label={nav?.buscador?.aria ?? (ingles ? "Search" : "Buscar")}
-                        onClick={abrirBusqueda}
-                    >
-                        <Icono nombre="buscar" />
-                    </button>
-                    <button
-                        type="button"
-                        ref={botonMenu}
-                        className="navbar-icono"
-                        aria-label={abierto ? cerrar : abrir}
-                        aria-expanded={abierto}
-                        aria-controls="navbar-panel"
-                        onClick={() => setAbierto((valor) => !valor)}
-                    >
-                        <Icono nombre={abierto ? "cerrar" : "menu"} />
-                    </button>
+                    type="button"
+                    className="navbar-icono"
+                    aria-label={nav?.buscador?.aria ?? (ingles ? "Search" : "Buscar")}
+                    onClick={abrirBusqueda}
+                >
+                    <Icono nombre="buscar" />
+                </button>
+
+                <MenuMovil
+                        abierto={abierto}
+                        onAlternar={() => setAbierto((valor) => !valor)}
+                        menuId="navbar-panel"
+                        botonRef={botonMenu}
+                        etiquetaAbrir={abrir}
+                        etiquetaCerrar={cerrar}
+                     />
                 </div>
 
                 <div

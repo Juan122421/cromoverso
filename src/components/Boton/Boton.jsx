@@ -1,5 +1,5 @@
 import "./Boton.css";
-import Icono from "./Icono.jsx";
+import Icono from "../Icono/Icono.jsx";
 
 const TAMANO_ICONO = { g: 20, m: 18, p: 16 };
 

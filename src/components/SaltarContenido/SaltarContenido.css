@@ -1,0 +1,14 @@
+.saltar-contenido {
+  position: absolute;
+  top: -100px;
+  left: var(--espacio-4);
+  z-index: 20;
+  padding: var(--espacio-2) var(--espacio-4);
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: var(--radio-s);
+  color: var(--texto-inverso);
+  background: var(--fondo-inverso);
+}
+.saltar-contenido:focus {
+  top: var(--espacio-2);
+}
