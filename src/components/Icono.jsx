@@ -5,6 +5,7 @@ import Chevron from "../assets/icons/chevronAbajo.svg?react";
 import Accesibilidad from "../assets/icons/accesibilidad.svg?react";
 import Menu from "../assets/icons/menu.svg?react";
 import Cerrar from "../assets/icons/cerrar.svg?react";
+import Destellos from "../assets/icons/destellos.svg?react";
 
 const ICONOS = {
     estrella: Estrella,
@@ -14,6 +15,7 @@ const ICONOS = {
     accesibilidad: Accesibilidad,
     menu: Menu,
     cerrar: Cerrar,
+    destellos: Destellos,
 };
 
 export default function Icono({ nombre, tamano = 20 }) {

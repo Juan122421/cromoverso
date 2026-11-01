@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTextos } from "./hooks/useTextos.js";
 import Navbar from "./components/Navbar.jsx";
+import Boton from "./components/Boton.jsx";
 
 function leerSeccion() {
     return window.location.hash.slice(1) || "inicio";
@@ -38,7 +39,7 @@ function App() {
             textoGrande={textoGrande}
             alternarTexto={() => setTextoGrande((valor) => !valor)}
         />
-    );
+        
+    ); 
 }
-
 export default App;

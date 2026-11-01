@@ -1,5 +1,11 @@
 :root {
   --ancho-contenido: 80rem; 
+   --objetivo-minimo: 44px;      
+  --anillo-foco: 3px;
+  --transicion-rapida: 150ms ease;
+  --opacidad-deshabilitado: 0.5;
+  --boton-relleno-g: 28px;
+  --boton-relleno-m: 22px;
 }
 
 * {

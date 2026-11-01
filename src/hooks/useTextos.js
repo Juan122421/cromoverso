@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 const API = "https://yanethm-cromoverso-api.fly.dev/api/v1/textos";
-const SECCIONES = "navbar,menuMovil,accesibilidad";
-const CLAVES_MENU = ["album", "sobres", "intercambios", "mundos", "ranking"];
+// Solo pedimos lo que el navbar necesita (el contrato permite ?seccion=)
+const SECCIONES = "navbar,menuMovil";
 
 function validarTextos(datos) {
   const textos = datos?.textos;
@@ -10,19 +10,27 @@ function validarTextos(datos) {
   const requeridas = {
     "navbar.logo.texto": nav?.logo?.texto,
     "navbar.logo.aria": nav?.logo?.aria,
-    ...Object.fromEntries(
-      CLAVES_MENU.map((c) => [`navbar.enlaces.${c}`, nav?.enlaces?.[c]])
-    ),
     "navbar.buscador.placeholder": nav?.buscador?.placeholder,
+    "navbar.buscador.aria": nav?.buscador?.aria,
     "navbar.botones.ingresar": nav?.botones?.ingresar,
     "navbar.botones.crearCuenta": nav?.botones?.crearCuenta,
+    "navbar.aria.idioma": nav?.aria?.idioma,
+    "navbar.aria.accesibilidad": nav?.aria?.accesibilidad,
     "menuMovil.abrir": textos?.menuMovil?.abrir,
     "menuMovil.cerrar": textos?.menuMovil?.cerrar,
   };
 
+  // Un texto es válido solo si es string y no está vacío
   const faltantes = Object.entries(requeridas)
     .filter(([, valor]) => !(typeof valor === "string" && valor.trim()))
     .map(([clave]) => clave);
+
+  // Los enlaces del menú cambian de un sprint a otro: basta con que haya al menos uno
+  const enlaces = Object.values(nav?.enlaces ?? {});
+  const enlacesValidos =
+    enlaces.length > 0 &&
+    enlaces.every((valor) => typeof valor === "string" && valor.trim());
+  if (!enlacesValidos) faltantes.push("navbar.enlaces");
 
   if (faltantes.length) {
     throw new Error(`Faltan textos en la respuesta: ${faltantes.join(", ")}`);
@@ -38,6 +46,7 @@ export function useTextos(idioma) {
 
   useEffect(() => {
     const controlador = new AbortController();
+    // La API se apaga si no se usa: la primera petición puede tardar
     const limite = setTimeout(() => controlador.abort(), 12000);
     let vigente = true;
     setCargando(true);

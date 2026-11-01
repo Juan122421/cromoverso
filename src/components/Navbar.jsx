@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import "./Navbar.css";
 import Icono from "./Icono.jsx";
+import Boton from "./Boton.jsx";
 
+// Añade aquí los enlaces nuevos cuando la API los envíe (el orden es el del menú)
 const DESTINOS = {
-    album: "#album",
-    sobres: "#sobres",
-    intercambios: "#intercambios",
+    inicio: "#inicio",
     mundos: "#mundos",
-    ranking: "#ranking",
 };
 
 const Navbar = ({
     textos, cargando, error, recargar,
     idioma, onBuscar, textoGrande, alternarTexto, cambiarIdioma, activo,
 }) => {
-    const [abierto, setAbierto] = useState(false); 
+    const [abierto, setAbierto] = useState(false); // menú móvil abierto o cerrado
     const [busqueda, setBusqueda] = useState("");
     const botonMenu = useRef(null);
     const campoBusqueda = useRef(null);
@@ -23,13 +22,11 @@ const Navbar = ({
 
     const abrir = textos?.menuMovil?.abrir ?? (ingles ? "Open menu" : "Abrir menú");
     const cerrar = textos?.menuMovil?.cerrar ?? (ingles ? "Close menu" : "Cerrar menú");
-    const etiquetaAccesibilidad =
-        nav?.aria?.accesibilidad ??
-        textos?.accesibilidad?.titulo ??
-        (ingles ? "Accessibility" : "Accesibilidad");
 
+    // Se recorre DESTINOS para respetar el orden del diseño
     const enlaces = Object.keys(DESTINOS).filter((clave) => nav?.enlaces?.[clave]);
 
+    // Escape cierra el menú móvil y devuelve el foco al botón
     useEffect(() => {
         if (!abierto) return;
         function cerrarConEscape(evento) {
@@ -51,7 +48,7 @@ const Navbar = ({
         evento.preventDefault();
         const consulta = busqueda.trim();
         if (!consulta) return;
-        onBuscar?.(consulta);
+        onBuscar?.(consulta); // la búsqueda aún no está conectada
         setAbierto(false);
     }
 
@@ -59,7 +56,7 @@ const Navbar = ({
         <header className="navbar">
             <nav
                 className="navbar-interior"
-                aria-label={nav?.aria?.menu ?? (ingles ? "Main navigation" : "Navegación principal")}
+                aria-label={ingles ? "Main navigation" : "Navegación principal"}
             >
                 <a
                     href="#inicio"
@@ -73,6 +70,7 @@ const Navbar = ({
                     <span>{nav?.logo?.texto ?? "cromoverso"}</span>
                 </a>
 
+                {/* Acciones del navbar móvil */}
                 <div className="navbar-movil-acciones">
                     <button
                         type="button"
@@ -100,6 +98,7 @@ const Navbar = ({
                     className={`navbar-panel${abierto ? " is-abierto" : ""}`}
                     aria-busy={cargando}
                 >
+                    {/* Estos dos mensajes van a mano: sin textos de la API no hay de dónde sacarlos */}
                     {cargando && !nav && (
                         <p className="navbar-estado" role="status">
                             {ingles ? "Loading navigation…" : "Cargando navegación…"}
@@ -131,7 +130,7 @@ const Navbar = ({
                             </ul>
 
                             <form className="navbar-buscador" role="search" aria-label={nav.buscador.aria} onSubmit={buscar}>
-                                <button type="submit" aria-label={nav.buscador.boton}>
+                                <button type="submit" aria-label={nav.buscador.aria}>
                                     <Icono nombre="buscar" />
                                 </button>
                                 <input
@@ -164,7 +163,7 @@ const Navbar = ({
                         <button
                             className="navbar-icono navbar-accesibilidad"
                             type="button"
-                            aria-label={etiquetaAccesibilidad}
+                            aria-label={nav?.aria?.accesibilidad ?? (ingles ? "Accessibility" : "Accesibilidad")}
                             aria-pressed={textoGrande}
                             onClick={alternarTexto}
                         >
@@ -173,12 +172,12 @@ const Navbar = ({
 
                         {nav && (
                             <>
-                                <a className="navbar-accion navbar-accion-secundaria" href="#ingresar" onClick={() => setAbierto(false)}>
+                                <Boton variante="secundario" tamano="p" href="#ingresar" onClick={() => setAbierto(false)}>
                                     {nav.botones.ingresar}
-                                </a>
-                                <a className="navbar-accion" href="#registro" onClick={() => setAbierto(false)}>
+                                </Boton>
+                                <Boton tamano="p" href="#registro" onClick={() => setAbierto(false)}>
                                     {nav.botones.crearCuenta}
-                                </a>
+                                </Boton>
                             </>
                         )}
                     </div>

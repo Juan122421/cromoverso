@@ -1,0 +1,100 @@
+.boton {
+  --boton-borde: var(--borde-grosor);
+  --boton-sombra: var(--sombra-pop-pequena);
+  --boton-sombra-hover: var(--sombra-pop);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  padding: var(--boton-pad-y) var(--boton-pad-x);
+  border: var(--boton-borde) solid var(--borde-fuerte);
+  border-radius: var(--radio-pildora);
+  color: var(--boton-texto);
+  background: var(--boton-fondo);
+  box-shadow: var(--boton-sombra);
+  font-family: var(--fuente-rubik);
+  font-size: var(--boton-texto-tam);
+  font-weight: 600;
+  line-height: var(--boton-texto-alto);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--transicion-rapida),
+    box-shadow var(--transicion-rapida);
+}
+.boton:hover {
+  color: var(--boton-texto);
+}
+.boton svg {
+  flex-shrink: 0;
+}
+.boton--g {
+  --boton-pad-y: var(--espacio-4);
+  --boton-pad-x: var(--boton-relleno-g);
+  --boton-texto-tam: 1rem;
+  --boton-texto-alto: 1.5rem;
+}
+.boton--m {
+  --boton-pad-y: var(--espacio-3);
+  --boton-pad-x: var(--boton-relleno-m);
+  --boton-texto-tam: 0.875rem;
+  --boton-texto-alto: 1.25rem;
+}
+.boton--p {
+  --boton-pad-y: var(--espacio-2);
+  --boton-pad-x: var(--espacio-4);
+  --boton-texto-tam: 0.75rem; 
+  --boton-texto-alto: 1rem;
+}
+
+/* Variantes */
+.boton--primario {
+  --boton-fondo: var(--marca-primario);
+  --boton-fondo-activo: var(--marca-primario-hover);
+  --boton-texto: var(--texto-inverso);
+}
+.boton--acento {
+  --boton-fondo: var(--marca-acento);
+  --boton-fondo-activo: var(--marca-acento);
+  --boton-texto: var(--texto-principal);
+}
+.boton--secundario {
+  --boton-fondo: var(--fondo-superficie);
+  --boton-fondo-activo: var(--fondo-sutil);
+  --boton-texto: var(--texto-principal);
+}
+.boton--fantasma {
+  --boton-fondo: transparent;
+  --boton-fondo-activo: var(--marca-primario-suave);
+  --boton-texto: var(--texto-marca);
+  --boton-borde: 0;
+  --boton-sombra: none;
+  --boton-sombra-hover: none;
+}
+
+/* Hover */
+.boton:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--boton-fondo-activo);
+  box-shadow: var(--boton-sombra-hover);
+}
+
+/* Presionado: mismo fondo que hover, sin sombra */
+.boton:active:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--boton-fondo-activo);
+  box-shadow: none;
+}
+
+/* Foco con teclado */
+.boton:focus-visible {
+  outline: var(--anillo-foco) solid var(--marca-primario);
+  outline-offset: 3px;
+}
+
+.boton:disabled,
+.boton[aria-disabled="true"] {
+  opacity: var(--opacidad-deshabilitado);
+  box-shadow: none;
+  cursor: not-allowed;
+}
