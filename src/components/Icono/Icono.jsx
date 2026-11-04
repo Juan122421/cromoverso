@@ -1,25 +1,28 @@
-import Estrella from "../../assets/icons/estrella.svg?react";
-import Buscar from "../../assets/icons/buscar.svg?react";
-import Idioma from "../../assets/icons/globo.svg?react";
-import Chevron from "../../assets/icons/chevronAbajo.svg?react";
-import Accesibilidad from "../../assets/icons/accesibilidad.svg?react";
-import Menu from "../../assets/icons/menu.svg?react";
-import Cerrar from "../../assets/icons/cerrar.svg?react";
-import Destellos from "../../assets/icons/destellos.svg?react";
+const modulos = import.meta.glob("../../assets/icons/*.svg", {
+  query: "?react",
+  import: "default",
+  eager: true,
+});
 
-const ICONOS = {
-    estrella: Estrella,
-    buscar: Buscar,
-    idioma: Idioma,
-    chevron: Chevron,
-    accesibilidad: Accesibilidad,
-    menu: Menu,
-    cerrar: Cerrar,
-    destellos: Destellos,
-};
+// El nombre del icono es el del archivo sin ".svg": <Icono nombre="chevronDer" />
+const ICONOS = Object.fromEntries(
+  Object.entries(modulos).map(([ruta, Componente]) => [
+    ruta.split("/").pop().replace(".svg", "").toLowerCase(),
+    Componente,
+  ])
+);
+
+// Nombres antiguos que todavía usa el navbar actual.
+// Se borra cuando el navbar se reemplace en la historia de navegación.
+const ALIAS = { idioma: "globo", chevron: "chevronAbajo" };
 
 export default function Icono({ nombre, tamano = 20 }) {
-    const Componente = ICONOS[nombre];
-    if (!Componente) return null;
-    return <Componente width={tamano} height={tamano} aria-hidden="true" focusable="false" />;
+  const Componente = ICONOS[(ALIAS[nombre] ?? nombre).toLowerCase()];
+  if (!Componente) {
+    if (import.meta.env.DEV) {
+      console.warn(`Icono «${nombre}» no encontrado en src/assets/icons/`);
+    }
+    return null;
+  }
+  return <Componente width={tamano} height={tamano} aria-hidden="true" focusable="false" />;
 }

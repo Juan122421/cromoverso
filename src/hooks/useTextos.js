@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-
-const API = "https://yanethm-cromoverso-api.fly.dev/api/v1/textos";
+import { API_URL } from "../config/api.js";
+const API = `${API_URL}/textos`;
 // Solo pedimos lo que el navbar necesita (el contrato permite ?seccion=)
 const SECCIONES = "navbar,menuMovil";
 
