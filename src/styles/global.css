@@ -1,13 +1,19 @@
 :root {
-  --ancho-contenido: 80rem; 
-   --objetivo-minimo: 44px;      
+  /* Medidas que Figma no exporta como tokens */
+  --ancho-maximo: 90rem; /* 1440 px */
+  --ancho-contenido: 80rem;
+  --ancho-banner-cookies: 75rem; /* 1200 px */
+  --alto-navbar-web: 76px;
+  --alto-navbar-movil: 60px;
+  --objetivo-minimo: 44px;
   --anillo-foco: 3px;
+  --borde-delgado: 1px;
+  --borde-medio: 1.5px;
   --transicion-rapida: 150ms ease;
   --opacidad-deshabilitado: 0.5;
   --boton-relleno-g: 28px;
   --boton-relleno-m: 22px;
 }
-
 * {
   box-sizing: border-box;
 }
@@ -58,4 +64,21 @@ a:hover {
   width: calc(100% - 2rem);
   max-width: var(--ancho-contenido);
   margin-inline: auto;
+}
+/* Texto que solo oyen los lectores de pantalla */
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip-path: inset(50%);
+}
+
+/* El foco programático en <main> (saltar al contenido) no necesita contorno */
+main:focus {
+  outline: none;
 }
