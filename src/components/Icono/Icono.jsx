@@ -7,7 +7,7 @@ const modulos = import.meta.glob("../../assets/icons/*.svg", {
 // El nombre del icono es el del archivo sin ".svg": <Icono nombre="chevronDer" />
 const ICONOS = Object.fromEntries(
   Object.entries(modulos).map(([ruta, Componente]) => [
-    ruta.split("/").pop().replace(".svg", ""),
+    ruta.split("/").pop().replace(".svg", "").toLowerCase(),
     Componente,
   ])
 );
@@ -17,7 +17,7 @@ const ICONOS = Object.fromEntries(
 const ALIAS = { idioma: "globo", chevron: "chevronAbajo" };
 
 export default function Icono({ nombre, tamano = 20 }) {
-  const Componente = ICONOS[ALIAS[nombre] ?? nombre];
+  const Componente = ICONOS[(ALIAS[nombre] ?? nombre).toLowerCase()];
   if (!Componente) {
     if (import.meta.env.DEV) {
       console.warn(`Icono «${nombre}» no encontrado en src/assets/icons/`);
