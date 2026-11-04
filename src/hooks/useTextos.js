@@ -1,41 +1,46 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "../config/api.js";
+
 const API = `${API_URL}/textos`;
-// Solo pedimos lo que el navbar necesita (el contrato permite ?seccion=)
-const SECCIONES = "navbar,menuMovil";
+// Solo pedimos lo que la interfaz usa (el contrato permite ?seccion=)
+const SECCIONES = "navbar,menuMovil,idioma";
+
+// Un texto es válido solo si es string y no está vacío
+const esTexto = (valor) => typeof valor === "string" && valor.trim() !== "";
+const hayTextos = (objeto) => {
+  const valores = Object.values(objeto ?? {});
+  return valores.length > 0 && valores.every(esTexto);
+};
 
 function validarTextos(datos) {
-  const textos = datos?.textos;
-  const nav = textos?.navbar;
+  const t = datos?.textos;
   const requeridas = {
-    "navbar.logo.texto": nav?.logo?.texto,
-    "navbar.logo.aria": nav?.logo?.aria,
-    "navbar.buscador.placeholder": nav?.buscador?.placeholder,
-    "navbar.buscador.aria": nav?.buscador?.aria,
-    "navbar.botones.ingresar": nav?.botones?.ingresar,
-    "navbar.botones.crearCuenta": nav?.botones?.crearCuenta,
-    "navbar.aria.idioma": nav?.aria?.idioma,
-    "navbar.aria.accesibilidad": nav?.aria?.accesibilidad,
-    "menuMovil.abrir": textos?.menuMovil?.abrir,
-    "menuMovil.cerrar": textos?.menuMovil?.cerrar,
+    "navbar.logo.texto": t?.navbar?.logo?.texto,
+    "navbar.logo.aria": t?.navbar?.logo?.aria,
+    "navbar.buscador.placeholder": t?.navbar?.buscador?.placeholder,
+    "navbar.buscador.aria": t?.navbar?.buscador?.aria,
+    "navbar.botones.ingresar": t?.navbar?.botones?.ingresar,
+    "navbar.botones.crearCuenta": t?.navbar?.botones?.crearCuenta,
+    "navbar.aria.accesibilidad": t?.navbar?.aria?.accesibilidad,
+    "menuMovil.abrir": t?.menuMovil?.abrir,
+    "menuMovil.cerrar": t?.menuMovil?.cerrar,
+    "idioma.etiqueta": t?.idioma?.etiqueta,
   };
 
-  // Un texto es válido solo si es string y no está vacío
   const faltantes = Object.entries(requeridas)
-    .filter(([, valor]) => !(typeof valor === "string" && valor.trim()))
+    .filter(([, valor]) => !esTexto(valor))
     .map(([clave]) => clave);
 
-  // Los enlaces del menú cambian de un sprint a otro: basta con que haya al menos uno
-  const enlaces = Object.values(nav?.enlaces ?? {});
-  const enlacesValidos =
-    enlaces.length > 0 &&
-    enlaces.every((valor) => typeof valor === "string" && valor.trim());
-  if (!enlacesValidos) faltantes.push("navbar.enlaces");
+  // Los enlaces cambian de un sprint a otro: basta con que haya al menos uno
+  if (!hayTextos(t?.navbar?.enlaces)) faltantes.push("navbar.enlaces");
+  // Los idiomas del selector salen de la API
+  if (!hayTextos(t?.idioma?.codigos)) faltantes.push("idioma.codigos");
+  if (!hayTextos(t?.idioma?.opciones)) faltantes.push("idioma.opciones");
 
   if (faltantes.length) {
     throw new Error(`Faltan textos en la respuesta: ${faltantes.join(", ")}`);
   }
-  return textos;
+  return t;
 }
 
 export function useTextos(idioma) {
@@ -52,7 +57,7 @@ export function useTextos(idioma) {
     setCargando(true);
     setError(false);
 
-    async function cargarTextosNavbar() {
+    async function cargarTextos() {
       try {
         const respuesta = await fetch(
           `${API}?idioma=${idioma}&seccion=${SECCIONES}`,
@@ -73,7 +78,7 @@ export function useTextos(idioma) {
       }
     }
 
-    cargarTextosNavbar();
+    cargarTextos();
     return () => {
       vigente = false;
       clearTimeout(limite);
