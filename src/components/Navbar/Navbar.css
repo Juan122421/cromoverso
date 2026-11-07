@@ -194,36 +194,6 @@
   align-items: center;
   gap: 12px;
 }
-.navbar-idioma {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  padding-left: 12px;
-  border: var(--borde-grosor) solid var(--borde-fuerte);
-  border-radius: var(--radio-pildora);
-  transition: box-shadow 150ms ease;
-}
-.navbar-idioma:focus-within {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--marca-primario) 25%, transparent);
-}
-.navbar-idioma select {
-  appearance: none;
-  min-height: 40px;
-  padding: 0 2px 0 0;
-  border: 0;
-  color: var(--texto-principal);
-  background: transparent;
-  font-size: 0.875rem;
-  font-weight: 700;
-}
-.navbar-idioma select:focus-visible {
-  outline: none;
-}
-.navbar-idioma svg:last-child {
-  margin-right: 12px;
-  pointer-events: none;
-}
 .navbar-accesibilidad {
   border-color: var(--borde-fuerte);
 }

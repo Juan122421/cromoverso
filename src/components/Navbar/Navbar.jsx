@@ -4,6 +4,7 @@ import Icono from "../Icono/Icono.jsx";
 import Boton from "../Boton/Boton.jsx";
 import MenuMovil from "../MenuMovil/MenuMovil.jsx";
 import { usePreferencias } from "../../context/PreferenciasContext.jsx";
+import SelectorIdioma from "../SelectorIdioma/SelectorIdioma.jsx";
 
 const DESTINOS = {
     inicio: "#inicio",
@@ -18,7 +19,7 @@ function leerSeccion() {
 const Navbar = () => {
     const {
         textos, cargando, error, recargar,
-        idioma, cambiarIdioma, textoGrande, alternarTexto,
+        idioma, textoGrande, alternarTexto,
     } = usePreferencias();
     const [activo, setActivo] = useState(leerSeccion);
     const [abierto, setAbierto] = useState(false);
@@ -144,19 +145,7 @@ const Navbar = () => {
                     )}
 
                     <div className="navbar-utilidades">
-                        <label className="navbar-idioma">
-                            <Icono nombre="idioma" />
-                            <select
-                                value={idioma}
-                                onChange={(evento) => cambiarIdioma(evento.target.value)}
-                                aria-label={nav?.aria?.idioma ?? (ingles ? "Change language" : "Cambiar idioma")}
-                            >
-                                <option value="es">ES</option>
-                                <option value="en">EN</option>
-                            </select>
-                            <Icono nombre="chevron" />
-                        </label>
-
+                        <SelectorIdioma />
                         <button
                             className="navbar-icono navbar-accesibilidad"
                             type="button"
