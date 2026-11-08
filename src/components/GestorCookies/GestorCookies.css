@@ -1,0 +1,11 @@
+.error-cookies {
+  position: fixed;
+  z-index: 25;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding: var(--espacio-3) var(--espacio-4);
+  color: var(--texto-inverso);
+  background: var(--estado-error);
+}
