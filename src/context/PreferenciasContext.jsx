@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useTextos } from "../hooks/useTextos.js";
-import { guardarCookie, leerCookie } from "../utils/cookies.js";
+import { borrarCookie,guardarCookie, leerCookie } from "../utils/cookies.js";
 
 const COOKIE_CONSENTIMIENTO = "consentimiento";
 const COOKIE_IDIOMA = "idioma";
@@ -9,22 +9,25 @@ const IDIOMA_POR_DEFECTO = "es";
 
 const PreferenciasContext = createContext(null);
 
-const consentimientoAceptado = () =>
-  leerCookie(COOKIE_CONSENTIMIENTO) === "aceptado";
+function leerConsentimiento(){
+  const valor = leerCookie(COOKIE_CONSENTIMIENTO);
+  return valor === "aceptado"|| valor ==="rechazado" ? valor:null;
+}
 
 // El idioma guardado solo se usa si la persona aceptó las cookies
 function leerIdiomaGuardado() {
-  if (!consentimientoAceptado()) return IDIOMA_POR_DEFECTO;
+  if (leerConsentimiento() !== "aceptado") return IDIOMA_POR_DEFECTO;
   const guardado = leerCookie(COOKIE_IDIOMA);
   return IDIOMAS.includes(guardado) ? guardado : IDIOMA_POR_DEFECTO;
 }
 
 export function PreferenciasProvider({ children }) {
   const [idioma, setIdioma] = useState(leerIdiomaGuardado);
+  const [consentimiento,setConsentimiento] = useState(leerConsentimiento)
+  const [errorCookies,setErrorCookies] = useState(false)
   const [textoGrande, setTextoGrande] = useState(false);
   const { textos, cargando, error, recargar } = useTextos(idioma);
 
-  // <html lang> cambia con el idioma
   useEffect(() => {
     document.documentElement.lang = idioma === "es" ? "es-CO" : "en";
   }, [idioma]);
@@ -38,15 +41,30 @@ export function PreferenciasProvider({ children }) {
 
   function cambiarIdioma(nuevo) {
     setIdioma(nuevo);
-    // Se lee la cookie en el momento: la decisión pudo cambiar desde la última visita
-    if (consentimientoAceptado()) guardarCookie(COOKIE_IDIOMA, nuevo);
+    if (leerConsentimiento() ==="aceptado") guardarCookie(COOKIE_IDIOMA, nuevo);
   }
-
+  function guardarConsentimiento(permitir){
+    const valor = permitir ? "aceptado" : "rechazado";
+    guardarCookie(COOKIE_CONSENTIMIENTO, valor);
+    if (leerCookie(COOKIE_CONSENTIMIENTO) !== valor) {
+      setErrorCookies(true); // el navegador bloqueó la cookie
+      return false;
+  }
+  
+  if (permitir) guardarCookie(COOKIE_IDIOMA, idioma);
+    else borrarCookie(COOKIE_IDIOMA);
+    setConsentimiento(valor);
+    setErrorCookies(false);
+    return true;
+  }
   const valor = {
     idioma,
     cambiarIdioma,
     textoGrande,
     alternarTexto: () => setTextoGrande((actual) => !actual),
+    consentimiento,
+    guardarConsentimiento,
+    errorCookies,
     textos,
     cargando,
     error,
