@@ -11,7 +11,7 @@ const PreferenciasContext = createContext(null);
 
 function leerConsentimiento(){
   const valor = leerCookie(COOKIE_CONSENTIMIENTO);
-  return valor = valor === "aceptado"|| valor ==="rechazado" ? valor:null;
+  return valor === "aceptado"|| valor ==="rechazado" ? valor:null;
 }
 
 // El idioma guardado solo se usa si la persona aceptó las cookies
@@ -24,7 +24,7 @@ function leerIdiomaGuardado() {
 export function PreferenciasProvider({ children }) {
   const [idioma, setIdioma] = useState(leerIdiomaGuardado);
   const [consentimiento,setConsentimiento] = useState(leerConsentimiento)
-  const [erroCookies,setErrorCookies] = useState(false)
+  const [errorCookies,setErrorCookies] = useState(false)
   const [textoGrande, setTextoGrande] = useState(false);
   const { textos, cargando, error, recargar } = useTextos(idioma);
 
