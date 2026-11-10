@@ -104,7 +104,7 @@ const Navbar = () => {
                                 {enlaces.map((clave) => (
                                     <li key={clave}>
                                         <NavLink
-                                            href={DESTINOS[clave]}
+                                            to={DESTINOS[clave]}
                                             end ={clave==="inicio"}
                                             onClick={() => setAbierto(false)}
                                         >
