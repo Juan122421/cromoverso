@@ -13,6 +13,7 @@
   --opacidad-deshabilitado: 0.5;
   --boton-relleno-g: 28px;
   --boton-relleno-m: 22px;
+  --radio-carta: 18px;
 }
 * {
   box-sizing: border-box;
@@ -87,4 +88,14 @@ main:focus {
   max-width: var(--ancho-contenido);
   margin-inline: auto;
   padding-block: var(--espacio-7);
+}
+@media (max-width: 56.1875rem) {
+  .ocultar-movil {
+    display: none !important;
+  }
+}
+@media (min-width: 56.25rem) {
+  .ocultar-escritorio {
+    display: none !important;
+  }
 }
