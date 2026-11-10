@@ -3,6 +3,7 @@
   --hero-rayos: 820px;
   --hero-rayos-izq: 10px;
   --hero-rayos-arriba: -360px;
+  --hero-rayos-color: color-mix(in srgb, var(--marca-primario) 30%, transparent);
 
   position: relative;
   isolation: isolate;
@@ -10,8 +11,6 @@
   color: var(--texto-inverso);
   background: var(--fondo-inverso);
 }
-/* Aproximación de los rayos de Figma. Si hace falta idéntico: exporta la capa
-   «Rayos» como SVG y úsala como background-image. */
 .hero__rayos {
   position: absolute;
   z-index: -1;
@@ -20,10 +19,10 @@
   width: var(--hero-rayos);
   height: var(--hero-rayos);
   border-radius: 50%;
-  background: repeating-conic-gradient(
-    color-mix(in srgb, var(--marca-primario) 30%, transparent) 0deg 7deg,
-    transparent 7deg 15deg
-  );
+  /* Dos capas con puntas de distinto ancho: dan el aspecto irregular del diseño */
+  background:
+    repeating-conic-gradient(from 8deg, var(--hero-rayos-color) 0 9deg, transparent 9deg 31deg),
+    repeating-conic-gradient(from 20deg, var(--hero-rayos-color) 0 5deg, transparent 5deg 43deg);
 }
 .hero__interior {
   position: relative;
@@ -146,7 +145,7 @@
   .hero__carta--centro {
     left: 160px;
     top: 30px;
-    z-index: 3;
+    z-index: 4
   }
 }
 .hero__sello {
