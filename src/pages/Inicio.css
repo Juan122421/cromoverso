@@ -1,0 +1,262 @@
+/* ---------- Portada ---------- */
+.hero {
+  --hero-rayos: 820px;
+  --hero-rayos-izq: 10px;
+  --hero-rayos-arriba: -360px;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: var(--texto-inverso);
+  background: var(--fondo-inverso);
+}
+/* Aproximación de los rayos de Figma. Si hace falta idéntico: exporta la capa
+   «Rayos» como SVG y úsala como background-image. */
+.hero__rayos {
+  position: absolute;
+  z-index: -1;
+  left: var(--hero-rayos-izq);
+  top: var(--hero-rayos-arriba);
+  width: var(--hero-rayos);
+  height: var(--hero-rayos);
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    color-mix(in srgb, var(--marca-primario) 30%, transparent) 0deg 7deg,
+    transparent 7deg 15deg
+  );
+}
+.hero__interior {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  max-width: var(--ancho-maximo);
+  margin-inline: auto;
+  padding: 20px var(--espacio-4) 28px;
+}
+.hero__bienvenida {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  min-width: 0;
+}
+.hero__titulo {
+  margin: 0;
+  font-family: var(--fuente-unbounded);
+  font-size: 2.5rem; /* Titular/H1 */
+  font-weight: 700;
+  line-height: 2.875rem;
+  letter-spacing: -1px;
+}
+.hero__subtitulo {
+  margin: 0;
+  color: var(--texto-inverso-suave);
+  font-size: 1rem; /* Cuerpo/M */
+  line-height: 1.5rem;
+}
+.hero__acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  max-width: 28rem;
+}
+.hero__nota {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  margin: 0;
+  color: var(--texto-inverso-suave);
+  font-size: 0.875rem; /* Cuerpo/P */
+  line-height: 1.25rem;
+}
+.hero__nota-icono {
+  display: flex;
+  color: var(--marca-acento);
+}
+.hero__cartas {
+  display: none;
+}
+
+/* Móvil: botones a todo el ancho y sin icono, como en Figma */
+@media (max-width: 56.1875rem) {
+  .hero .hero__boton {
+    display: flex;
+    width: 100%;
+  }
+  .hero .hero__boton svg {
+    display: none;
+  }
+}
+
+/* Escritorio */
+@media (min-width: 56.25rem) {
+  .hero {
+    --hero-rayos: 1500px;
+    --hero-rayos-izq: 380px;
+    --hero-rayos-arriba: -560px;
+  }
+  .hero__interior {
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    padding: 56px var(--espacio-7) 72px;
+  }
+  .hero__bienvenida {
+    gap: var(--espacio-5);
+  }
+  .hero__titulo {
+    max-width: 47.5rem;
+    font-size: 3.5rem; /* Titular/Display */
+    line-height: 3.875rem;
+    letter-spacing: -1.5px;
+  }
+  .hero__acciones {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--espacio-3);
+    max-width: none;
+  }
+}
+
+/* Cartas destacadas: solo cuando caben junto al texto */
+@media (min-width: 68.75rem) {
+  .hero__cartas {
+    position: relative;
+    display: block;
+    flex: none;
+    width: 560px;
+    height: 430px;
+  }
+  .hero__carta {
+    position: absolute;
+  }
+  .hero__carta--izquierda {
+    left: 0;
+    top: 32.46px;
+    z-index: 1;
+    transform: rotate(-9deg);
+  }
+  .hero__carta--derecha {
+    left: 247.44px;
+    top: 40px;
+    z-index: 2;
+    transform: rotate(9deg);
+  }
+  .hero__carta--centro {
+    left: 160px;
+    top: 30px;
+    z-index: 3;
+  }
+}
+.hero__sello {
+  position: absolute;
+  left: 120px;
+  top: -23px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  padding: 6px var(--espacio-3);
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: var(--radio-pildora);
+  color: var(--texto-principal);
+  background: var(--marca-acento);
+  box-shadow: var(--sombra-pop-pequena);
+  font-size: 0.6875rem; /* Detalle/Etiqueta */
+  font-weight: 700;
+  line-height: 0.875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: rotate(-6deg);
+}
+
+/* ---------- Los seis mundos ---------- */
+.mundos {
+  background: var(--fondo-pagina);
+}
+.mundos__interior {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: var(--ancho-maximo);
+  margin-inline: auto;
+  padding-block: var(--espacio-5) var(--espacio-2);
+}
+.mundos__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  padding-inline: var(--espacio-4);
+}
+.mundos__titulos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+.mundos__titulo {
+  margin: 0;
+}
+.mundos__subtitulo {
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+.mundos__estado {
+  margin: 0;
+  padding-inline: var(--espacio-4);
+  color: var(--texto-secundario);
+}
+
+/* Móvil: carrusel que se desplaza */
+.mundos__lista {
+  display: flex;
+  gap: var(--espacio-3);
+  margin: 0;
+  padding: var(--espacio-1) var(--espacio-4) 10px;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x proximity;
+}
+.mundos__lista > li {
+  flex: 0 0 156px;
+  scroll-snap-align: start;
+}
+@media (max-width: 56.1875rem) {
+  /* En móvil «Ver Ciudad Neón» es un enlace de texto, sin relleno */
+  .mundos .mundos__ver {
+    --boton-pad-y: 0;
+    --boton-pad-x: 0;
+  }
+}
+
+/* Escritorio: rejilla de 3 columnas y, desde 1200 px, de 6 */
+@media (min-width: 56.25rem) {
+  .mundos__interior {
+    gap: var(--espacio-5);
+    padding: 56px var(--espacio-7) var(--espacio-6);
+  }
+  .mundos__cabecera,
+  .mundos__estado {
+    padding-inline: 0;
+  }
+  .mundos__lista {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espacio-4);
+    padding: 0 var(--espacio-1) var(--espacio-1) 0;
+    overflow: visible;
+  }
+  .mundos__lista > li {
+    flex: none;
+  }
+}
+@media (min-width: 75rem) {
+  .mundos__lista {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
