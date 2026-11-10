@@ -1,0 +1,311 @@
+.cromo {
+  --cromo-brillo: rgb(255 255 255 / 14%);
+  --cromo-halo: rgb(255 255 255 / 22%);
+  --cromo-holograma: linear-gradient(
+    135deg,
+    rgb(255 112 217 / 50%) 14.29%,
+    rgb(255 230 110 / 50%) 39.29%,
+    rgb(112 255 232 / 50%) 60.71%,
+    rgb(140 122 255 / 50%) 85.71%
+  );
+  --rareza-color: var(--rareza-comun);
+
+  position: relative;
+  box-sizing: border-box;
+  flex: none;
+  max-width: var(--cromo-ancho);
+  aspect-ratio: var(--cromo-proporcion);
+  border-radius: var(--cromo-radio);
+  color: var(--texto-principal);
+  background: var(--fondo-superficie);
+  box-shadow: var(--cromo-sombra) var(--cromo-sombra) 0 0 var(--borde-fuerte);
+  font-family: var(--fuente-rubik);
+}
+/* El borde va encima: así las medidas internas coinciden con Figma */
+.cromo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: var(--cromo-borde) solid var(--borde-fuerte);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Tamaños (medidas exportadas de Figma) */
+.cromo--g {
+  --cromo-ancho: 240px;
+  --cromo-proporcion: 240 / 336;
+  --cromo-borde: 2.5px;
+  --cromo-radio: var(--radio-carta);
+  --cromo-sombra: 4px;
+  --cromo-inset: 8px;
+  --arte-alto: 80.36%;
+  --arte-borde: 2px;
+  --arte-radio: 12px;
+  --halo-arriba: 15.5%;
+  --hombros-arriba: 66.4%;
+  --hombros-alto: 34.4%;
+  --cabeza-arriba: 44%;
+  --antifaz-arriba: 52.9%;
+  --emblema-arriba: 73.9%;
+  --num-alto: 26px;
+  --num-relleno: 8px;
+  --num-borde: 2px;
+  --num-familia: var(--fuente-unbounded);
+  --num-peso: 700;
+  --num-tam: 0.875rem;
+  --num-linea: 1rem;
+  --rareza-ancho: 19px;
+  --rareza-alto: 28px;
+  --rareza-der: 33px;
+  --rareza-icono: 15px;
+  --pie-arriba: 84.82%;
+  --pie-relleno: 4px;
+  --nombre-tam: 1.0625rem;
+  --nombre-linea: 1.375rem;
+
+  width: var(--cromo-ancho);
+}
+.cromo--m {
+  --cromo-ancho: 168px;
+  --cromo-proporcion: 168 / 235;
+  --cromo-borde: 2.5px;
+  --cromo-radio: 12.6px;
+  --cromo-sombra: 4px;
+  --cromo-inset: 5.6px;
+  --arte-alto: 77.45%;
+  --arte-borde: 2px;
+  --arte-radio: 8.4px;
+  --halo-arriba: 13.8%;
+  --hombros-arriba: 65.5%;
+  --hombros-alto: 35.6%;
+  --cabeza-arriba: 42.2%;
+  --antifaz-arriba: 51.5%;
+  --emblema-arriba: 73.3%;
+  --num-alto: 24.2px;
+  --num-relleno: 5.6px;
+  --num-borde: 2px;
+  --num-familia: var(--fuente-rubik);
+  --num-peso: 600;
+  --num-tam: 0.75rem;
+  --num-linea: 1rem;
+  --rareza-ancho: 14.5px;
+  --rareza-alto: 19.6px;
+  --rareza-der: 22px;
+  --rareza-icono: 10.5px;
+  --pie-arriba: 81.91%;
+  --pie-relleno: 2.8px;
+  --nombre-tam: 0.8125rem;
+  --nombre-linea: 1.0625rem;
+
+  width: 100%;
+}
+.cromo--p {
+  --cromo-ancho: 111.36px;
+  --cromo-proporcion: 111.36 / 155.52;
+  --cromo-borde: 1.44px;
+  --cromo-radio: 8.29px;
+  --cromo-sombra: 1.92px;
+  --cromo-inset: 3.69px;
+  --arte-alto: 84.57%;
+  --arte-borde: 1.44px;
+  --arte-radio: 5.53px;
+  --halo-arriba: 17.6%;
+  --hombros-arriba: 68.8%;
+  --hombros-alto: 32.7%;
+  --cabeza-arriba: 47.4%;
+  --antifaz-arriba: 56%;
+  --emblema-arriba: 76%;
+  --num-alto: 16.64px;
+  --num-relleno: 3.69px;
+  --num-borde: 1.44px;
+  --num-familia: var(--fuente-unbounded);
+  --num-peso: 700;
+  --num-tam: 0.54rem;
+  --num-linea: 0.6875rem;
+  --rareza-ancho: 12.48px;
+  --rareza-alto: 15.36px;
+  --rareza-der: 14px;
+  --rareza-icono: 9.6px;
+  --pie-arriba: 89.01%;
+  --pie-relleno: 1.84px;
+  --nombre-tam: 0.6rem;
+  --nombre-linea: 0.75rem;
+
+  width: 100%;
+}
+.cromo--p .cromo__detalle {
+  display: none;
+}
+
+/* Color de la rareza (tokens de Figma) */
+.cromo--comun {
+  --rareza-color: var(--rareza-comun);
+}
+.cromo--rara {
+  --rareza-color: var(--rareza-rara);
+}
+.cromo--epica {
+  --rareza-color: var(--rareza-epica);
+}
+.cromo--legendaria {
+  --rareza-color: var(--rareza-legendaria);
+}
+
+/* Ilustración */
+.cromo__arte {
+  position: absolute;
+  left: var(--cromo-inset);
+  top: var(--cromo-inset);
+  box-sizing: border-box;
+  width: calc(100% - 2 * var(--cromo-inset));
+  height: var(--arte-alto);
+  overflow: hidden;
+  border: var(--arte-borde) solid var(--borde-fuerte);
+  border-radius: var(--arte-radio);
+  background: var(--cromo-color, var(--mundo-neon));
+}
+.cromo__rayos {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  width: 190%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: repeating-conic-gradient(var(--cromo-brillo) 0deg 9deg, transparent 9deg 18deg);
+}
+.cromo__halo {
+  position: absolute;
+  left: 15%;
+  top: var(--halo-arriba);
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--cromo-halo);
+}
+.cromo__hombros {
+  position: absolute;
+  left: 17%;
+  top: var(--hombros-arriba);
+  width: 66%;
+  height: var(--hombros-alto);
+  border-radius: 42% 42% 0 0 / 67% 67% 0 0;
+  background: var(--fondo-inverso);
+}
+.cromo__cabeza {
+  position: absolute;
+  left: 35%;
+  top: var(--cabeza-arriba);
+  width: 30%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--fondo-inverso);
+}
+.cromo__antifaz {
+  position: absolute;
+  left: 37.1%;
+  top: var(--antifaz-arriba);
+  width: 25.8%;
+  aspect-ratio: 57.79 / 14.78;
+  border-radius: var(--radio-pildora);
+  background: var(--marca-acento);
+}
+.cromo__emblema {
+  position: absolute;
+  left: 42.5%;
+  top: var(--emblema-arriba);
+  width: 15%;
+  aspect-ratio: 1;
+  color: var(--marca-acento);
+}
+.cromo__emblema svg,
+.cromo__emblema svg * {
+  fill: currentColor;
+  stroke: var(--fondo-inverso);
+}
+.cromo__holograma {
+  position: absolute;
+  inset: 0;
+  background: var(--cromo-holograma);
+  mix-blend-mode: screen;
+}
+
+/* Insignias */
+.cromo__numero {
+  position: absolute;
+  z-index: 1;
+  left: var(--cromo-inset);
+  top: var(--cromo-inset);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--num-alto);
+  padding-inline: var(--num-relleno);
+  border: var(--num-borde) solid var(--borde-fuerte);
+  border-radius: var(--radio-pildora);
+  background: var(--fondo-superficie);
+  font-family: var(--num-familia);
+  font-size: var(--num-tam);
+  font-weight: var(--num-peso);
+  line-height: var(--num-linea);
+}
+.cromo__rareza {
+  position: absolute;
+  z-index: 1;
+  right: var(--rareza-der);
+  top: var(--cromo-inset);
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--rareza-ancho);
+  height: var(--rareza-alto);
+  border: var(--num-borde) solid var(--borde-fuerte);
+  border-radius: var(--radio-pildora);
+  color: var(--rareza-color);
+  background: var(--fondo-superficie);
+}
+.cromo__rareza svg {
+  width: var(--rareza-icono);
+  height: var(--rareza-icono);
+}
+/* Común: solo contorno; las demás van rellenas, como en Figma */
+.cromo__rareza svg,
+.cromo__rareza svg * {
+  fill: currentColor;
+}
+.cromo--comun .cromo__rareza svg,
+.cromo--comun .cromo__rareza svg * {
+  fill: none;
+}
+
+/* Pie */
+.cromo__pie {
+  position: absolute;
+  left: var(--cromo-inset);
+  right: var(--cromo-inset);
+  top: var(--pie-arriba);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-inline: var(--pie-relleno);
+}
+.cromo__nombre {
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--fuente-unbounded);
+  font-size: var(--nombre-tam);
+  font-weight: 600;
+  line-height: var(--nombre-linea);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cromo__detalle {
+  margin: 0;
+  overflow: hidden;
+  color: var(--texto-secundario);
+  font-size: 0.75rem; /* Detalle/Nota */
+  line-height: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
