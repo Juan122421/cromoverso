@@ -5,23 +5,17 @@ import Boton from "../Boton/Boton.jsx";
 import MenuMovil from "../MenuMovil/MenuMovil.jsx";
 import { usePreferencias } from "../../context/PreferenciasContext.jsx";
 import SelectorIdioma from "../SelectorIdioma/SelectorIdioma.jsx";
-
+import { Link, NavLink } from "react-router-dom";
 const DESTINOS = {
-    inicio: "#inicio",
-    mundos: "#mundos",
+    inicio: "/",
+    mundos: "/mundos",
 };
-
-// Provisional: cuando haya enrutamiento real, la sección activa sale de la ruta
-function leerSeccion() {
-    return window.location.hash.slice(1) || "inicio";
-}
 
 const Navbar = () => {
     const {
         textos, cargando, error, recargar,
         idioma, textoGrande, alternarTexto,
     } = usePreferencias();
-    const [activo, setActivo] = useState(leerSeccion);
     const [abierto, setAbierto] = useState(false);
     const [busqueda, setBusqueda] = useState("");
     const botonMenu = useRef(null);
@@ -31,13 +25,6 @@ const Navbar = () => {
     const abrir = textos?.menuMovil?.abrir ?? (ingles ? "Open menu" : "Abrir menú");
     const cerrar = textos?.menuMovil?.cerrar ?? (ingles ? "Close menu" : "Cerrar menú");
     const enlaces = Object.keys(DESTINOS).filter((clave) => nav?.enlaces?.[clave]);
-
-
-    useEffect(() => {
-        const actualizar = () => setActivo(leerSeccion());
-        window.addEventListener("hashchange", actualizar);
-        return () => window.removeEventListener("hashchange", actualizar);
-    }, []);
 
     function abrirBusqueda() {
         setAbierto(true);
@@ -58,8 +45,8 @@ const Navbar = () => {
                 className="navbar-interior"
                 aria-label={ingles ? "Main navigation" : "Navegación principal"}
             >
-                <a
-                    href="#inicio"
+                <Link
+                    to ="/"
                     className="navbar-marca"
                     aria-label={nav?.logo?.aria ?? "Cromoverso"}
                     onClick={() => setAbierto(false)}
@@ -68,8 +55,8 @@ const Navbar = () => {
                         <Icono nombre="estrella" />
                     </span>
                     <span>{nav?.logo?.texto ?? "cromoverso"}</span>
-                </a>
 
+                </Link>
                 {/* Acciones del navbar móvil */}
                 <div className="navbar-movil-acciones">
                     <button
@@ -116,13 +103,13 @@ const Navbar = () => {
                             <ul className="navbar-enlaces">
                                 {enlaces.map((clave) => (
                                     <li key={clave}>
-                                        <a
+                                        <NavLink
                                             href={DESTINOS[clave]}
-                                            aria-current={activo === clave ? "page" : undefined}
+                                            end ={clave==="inicio"}
                                             onClick={() => setAbierto(false)}
                                         >
                                             {nav.enlaces[clave]}
-                                        </a>
+                                        </NavLink>
                                     </li>
                                 ))}
                             </ul>
@@ -158,10 +145,10 @@ const Navbar = () => {
 
                         {nav && (
                             <>
-                                <Boton variante="secundario" tamano="p" href="#ingresar" onClick={() => setAbierto(false)}>
+                                <Boton variante="secundario" tamaño="p" to="/ingresar" onClick={() => setAbierto(false)}>
                                     {nav.botones.ingresar}
                                 </Boton>
-                                <Boton tamano="p" href="#registro" onClick={() => setAbierto(false)}>
+                                <Boton tamaño="p" to="/registro" onClick={() => setAbierto(false)}>
                                     {nav.botones.crearCuenta}
                                 </Boton>
                             </>
