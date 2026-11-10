@@ -3,7 +3,7 @@ import { API_URL } from "../config/api.js";
 
 const API = `${API_URL}/textos`;
 // Solo pedimos lo que la interfaz usa (el contrato permite ?seccion=)
-const SECCIONES = "navbar,menuMovil,idioma,cookies,estados,errores";
+const SECCIONES = "navbar,menuMovil,idioma,cookies,estados,errores,general";
 
 // Un texto es válido solo si es string y no está vacío
 const esTexto = (valor) => typeof valor === "string" && valor.trim() !== "";
@@ -31,6 +31,7 @@ function validarTextos(datos) {
     "cookies.banner.botones.rechazar": t?.cookies?.banner?.botones?.rechazar,
     "estados.mensajes.guardado": t?.estados?.mensajes?.guardado,
     "errores.generico": t?.errores?.generico,
+    "general.aria.saltarAlContenido": t?.general?.aria?.saltarAlContenido,
   };
 
   const faltantes = Object.entries(requeridas)

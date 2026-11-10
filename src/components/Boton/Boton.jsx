@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Boton.css";
 import Icono from "../Icono/Icono.jsx";
 
@@ -8,7 +9,8 @@ export default function Boton({
   tamano = "m", // g | m | p
   icono,
   deshabilitado = false,
-  href,
+  to, // ruta interna del router: "/ingresar"
+  href, // enlace externo o ancla
   type = "button",
   className = "",
   children,
@@ -21,6 +23,15 @@ export default function Boton({
       {children}
     </>
   );
+
+  if (to) {
+    return (
+      <Link className={clases} to={to} {...resto}>
+        {contenido}
+      </Link>
+    );
+  }
+
   if (href) {
     return (
       <a

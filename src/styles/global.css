@@ -82,3 +82,9 @@ a:hover {
 main:focus {
   outline: none;
 }
+.pagina {
+  width: calc(100% - 2 * var(--espacio-4));
+  max-width: var(--ancho-contenido);
+  margin-inline: auto;
+  padding-block: var(--espacio-7);
+}
