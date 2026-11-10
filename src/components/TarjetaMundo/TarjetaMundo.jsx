@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import "./TarjetaMundo.css";
 import Icono from "../Icono/Icono.jsx";
+import { iconoDeFigura } from "../../config/mundos.js";
 
 // Fondo suave de cada mundo (tokens de Figma). Si el id no está aquí,
 // el CSS calcula el fondo mezclando el color del mundo con blanco.
@@ -21,6 +22,7 @@ export default function TarjetaMundo({ mundo, etiqueta, cantidad }) {
     <Link className="tarjeta-mundo" to={`/mundos/${mundo.id}`} style={estilo}>
       <span className="tarjeta-mundo__arriba">
         <span className="tarjeta-mundo__emblema" aria-hidden="true">
+          <Icono nombre={iconoDeFigura(mundo.figura)} tamaño={22} />
           <Icono nombre={mundo.figura} tamano={22} />
         </span>
         {etiqueta && <span className="tarjeta-mundo__etiqueta">{etiqueta}</span>}

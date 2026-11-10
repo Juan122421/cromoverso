@@ -1,5 +1,6 @@
 import "./Cromo.css";
 import Icono from "../Icono/Icono.jsx";
+import { iconoDeFigura } from "../../config/mundos.js";
 
 // La carta se dibuja con CSS: no hay imágenes (la API da colorBase y figura).
 // tamano: "g" (portada) | "m" (catálogo web) | "p" (catálogo móvil)
@@ -26,7 +27,8 @@ export default function Cromo({
         <span className="cromo__cabeza" />
         <span className="cromo__antifaz" />
         <span className="cromo__emblema">
-          <Icono nombre={cromo.ilustracion?.figura ?? "estrella"} tamano="100%" />
+          <Icono nombre={iconoDeFigura(cromo.ilustracion?.figura)} tamaño="100%" />
+          <Icono nombre={cromo.ilustracion?.figura ?? "estrella"} tamaño="100%" />
         </span>
         {cromo.holografico && <span className="cromo__holograma" />}
       </div>
