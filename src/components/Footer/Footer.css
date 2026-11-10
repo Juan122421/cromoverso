@@ -1,0 +1,101 @@
+.footer {
+  color: var(--texto-inverso);
+  background: var(--fondo-inverso);
+  font-family: var(--fuente-rubik);
+}
+.footer :focus-visible {
+  outline: var(--anillo-foco) solid var(--marca-acento);
+  outline-offset: 3px;
+}
+
+/* Móvil primero */
+.footer__interior {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+  max-width: var(--ancho-maximo);
+  margin-inline: auto;
+  padding: 40px var(--espacio-5) var(--espacio-6);
+}
+.footer__columnas {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.footer__marca {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+.footer__lema {
+  max-width: 36.375rem; /* 582 px */
+  margin: 0;
+  color: var(--texto-inverso-suave);
+  font-size: 0.875rem; /* Cuerpo/P */
+  line-height: 1.25rem;
+}
+.footer__enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-5) var(--espacio-6);
+}
+.footer__columna {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer__titulo {
+  margin: 0;
+  color: var(--marca-acento);
+  font-family: var(--fuente-rubik);
+  font-size: 0.6875rem; /* Detalle/Etiqueta */
+  font-weight: 700;
+  line-height: 0.875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.footer__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.footer__enlace {
+  color: var(--texto-inverso);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-decoration: none;
+}
+a.footer__enlace:hover {
+  color: var(--texto-inverso);
+  text-decoration: underline;
+}
+.footer__legal {
+  padding-top: 20px;
+  border-top: var(--borde-delgado) solid var(--borde-inverso);
+}
+.footer__derechos {
+  margin: 0;
+  color: var(--texto-inverso-suave);
+  font-size: 0.75rem; /* Detalle/Nota */
+  line-height: 1rem;
+}
+
+@media (min-width: 56.25rem) {
+  .footer__interior {
+    gap: 40px;
+    padding: 56px var(--espacio-7) var(--espacio-6);
+  }
+  .footer__columnas {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--espacio-6);
+  }
+  .footer__enlaces {
+    flex-wrap: nowrap;
+    gap: 72px;
+  }
+}

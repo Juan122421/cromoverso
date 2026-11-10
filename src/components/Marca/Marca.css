@@ -1,0 +1,48 @@
+.marca {
+  --marca-emblema: 36px;
+  --marca-estrella: 20px;
+  --marca-grosor: var(--borde-grosor);
+  --marca-fuente: 1.25rem; /* Titular/H3 */
+  --marca-linea: 1.625rem;
+  --marca-separacion: 10px;
+  --marca-color: var(--texto-principal);
+  --marca-contorno: var(--borde-fuerte);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--marca-separacion);
+  color: var(--marca-color);
+  font-family: var(--fuente-unbounded);
+  font-size: var(--marca-fuente);
+  font-weight: 600;
+  line-height: var(--marca-linea);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.marca:hover {
+  color: var(--marca-color);
+}
+.marca--inversa {
+  --marca-color: var(--texto-inverso);
+  --marca-contorno: var(--texto-inverso);
+}
+.marca__emblema {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--marca-emblema);
+  height: var(--marca-emblema);
+  border: var(--marca-grosor) solid var(--marca-contorno);
+  border-radius: 50%;
+  background: var(--marca-primario);
+}
+.marca__estrella {
+  display: block;
+  width: var(--marca-estrella);
+  height: var(--marca-estrella);
+  color: var(--marca-acento);
+}
+.marca__estrella svg {
+  display: block;
+  fill: currentColor;
+}

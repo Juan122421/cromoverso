@@ -1,3 +1,9 @@
 .landing {
   isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+.landing > main {
+  flex: 1;
 }

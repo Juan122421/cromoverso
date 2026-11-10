@@ -1,0 +1,27 @@
+.boton-accesibilidad {
+  --boton-accesibilidad: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--boton-accesibilidad);
+  height: var(--boton-accesibilidad);
+  padding: 0;
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: 50%;
+  color: var(--texto-principal);
+  background: var(--fondo-superficie);
+  cursor: pointer;
+  transition: background-color var(--transicion-rapida);
+}
+.boton-accesibilidad:hover {
+  background: var(--fondo-sutil);
+}
+.boton-accesibilidad[aria-pressed="true"] {
+  background: var(--marca-primario-suave);
+}
+.boton-accesibilidad:focus-visible {
+  outline: var(--anillo-foco) solid var(--marca-primario);
+  outline-offset: 3px;
+}
