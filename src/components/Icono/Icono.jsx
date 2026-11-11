@@ -13,8 +13,18 @@ const ICONOS = Object.fromEntries(
   ])
 );
 
+// La API describe cada mundo con una «figura» que no es el nombre de un icono.
+// Aquí se traduce al icono que usa el diseño (según el Figma del Sprint 1).
+const FIGURAS = {
+  ola: "mundo", // Abismo Coral
+  hoja: "destellos", // Bosque Eterno
+  orbita: "estrella", // Estación Órbita
+  runa: "ojo", // Reino de Niebla
+};
+
 export default function Icono({ nombre, tamano = 20 }) {
-  const Componente = ICONOS[nombre.toLowerCase()];
+  const clave = (FIGURAS[nombre] ?? nombre ?? "").toLowerCase();
+  const Componente = ICONOS[clave];
   if (!Componente) {
     if (import.meta.env.DEV) {
       console.warn(`Icono «${nombre}» no encontrado en src/assets/icons/`);

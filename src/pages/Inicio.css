@@ -18,11 +18,8 @@
   top: var(--hero-rayos-arriba);
   width: var(--hero-rayos);
   height: var(--hero-rayos);
-  border-radius: 50%;
-  /* Dos capas con puntas de distinto ancho: dan el aspecto irregular del diseño */
-  background:
-    repeating-conic-gradient(from 8deg, var(--hero-rayos-color) 0 9deg, transparent 9deg 31deg),
-    repeating-conic-gradient(from 20deg, var(--hero-rayos-color) 0 5deg, transparent 5deg 43deg);
+  color: var(--hero-rayos-color); /* el SVG se pinta con currentColor */
+  pointer-events: none;
 }
 .hero__interior {
   position: relative;

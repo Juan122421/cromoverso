@@ -8,6 +8,7 @@ import { useDatos } from "../hooks/useDatos.js";
 import { useTitulo } from "../hooks/useTitulo.js";
 import { pedir } from "../services/api.js";
 import { formatear } from "../utils/formatear.js";
+import Rayos from "../assets/rayos/rayos.svg?react";
 
 // Posición (en la lista de mundos) del mundo cuyo guardián va en cada carta
 // de la portada: izquierda, centro y derecha. Los datos salen de la API.
@@ -67,7 +68,7 @@ export default function Inicio() {
     <>
       {/* ---------- Portada ---------- */}
       <section className="hero" aria-labelledby="hero-titulo">
-        <div className="hero__rayos" aria-hidden="true" />
+        <Rayos className="hero__rayos" aria-hidden="true" focusable="false" />
 
         <div className="hero__interior">
           <div className="hero__bienvenida">
