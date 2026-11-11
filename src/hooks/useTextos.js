@@ -3,7 +3,7 @@ import { API_URL } from "../config/api.js";
 
 const API = `${API_URL}/textos`;
 // Solo pedimos lo que la interfaz usa (el contrato permite ?seccion=)
-const SECCIONES = "navbar,menuMovil,idioma,cookies,footer,estados,errores,general";
+const SECCIONES = "navbar,menuMovil,idioma,cookies,footer,estados,errores,general,paginas,componentes";
 
 // Un texto es válido solo si es string y no está vacío
 const esTexto = (valor) => typeof valor === "string" && valor.trim() !== "";

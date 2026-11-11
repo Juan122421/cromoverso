@@ -8,6 +8,7 @@ export default function Boton({
   variante = "primario", // primario | acento | secundario | fantasma
   tamano = "m", // g | m | p
   icono,
+  iconoAlFinal = false, // true: el icono va después del texto
   deshabilitado = false,
   to, // ruta interna del router: "/ingresar"
   href, // enlace externo o ancla
@@ -17,10 +18,12 @@ export default function Boton({
   ...resto
 }) {
   const clases = `boton boton--${variante} boton--${tamano} ${className}`.trim();
+  const iconoJsx = icono ? <Icono nombre={icono} tamano={TAMANO_ICONO[tamano]} /> : null;
   const contenido = (
     <>
-      {icono && <Icono nombre={icono} tamano={TAMANO_ICONO[tamano]} />}
+      {!iconoAlFinal && iconoJsx}
       {children}
+      {iconoAlFinal && iconoJsx}
     </>
   );
 

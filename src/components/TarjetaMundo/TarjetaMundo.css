@@ -1,0 +1,80 @@
+.tarjeta-mundo {
+  --tarjeta-relleno: 14px;
+  --tarjeta-separacion: 10px;
+  --tarjeta-emblema: 36px;
+  --tarjeta-icono: 18px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+  height: 100%;
+  gap: var(--tarjeta-separacion);
+  padding: var(--tarjeta-relleno);
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: var(--radio-carta);
+  color: var(--texto-principal);
+  background: var(--mundo-suave, color-mix(in srgb, var(--mundo-color) 14%, var(--fondo-superficie)));
+  box-shadow: var(--sombra-pop);
+  font-family: var(--fuente-rubik);
+  text-decoration: none;
+}
+.tarjeta-mundo:hover {
+  color: var(--texto-principal);
+}
+.tarjeta-mundo:focus-visible {
+  outline: var(--anillo-foco) solid var(--marca-primario);
+  outline-offset: 3px;
+}
+
+.tarjeta-mundo__arriba {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  gap: var(--espacio-2);
+}
+.tarjeta-mundo__emblema {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: var(--tarjeta-emblema);
+  height: var(--tarjeta-emblema);
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: 50%;
+  color: var(--texto-inverso);
+  background: var(--mundo-color);
+}
+.tarjeta-mundo__emblema svg {
+  width: var(--tarjeta-icono);
+  height: var(--tarjeta-icono);
+}
+.tarjeta-mundo__etiqueta {
+  padding: 4px 10px;
+  border-radius: var(--radio-pildora);
+  color: var(--estado-alerta);
+  background: var(--estado-alerta-suave);
+  font-size: 0.75rem; /* Detalle/Nota fuerte */
+  font-weight: 600;
+  line-height: 1rem;
+}
+.tarjeta-mundo__nombre {
+  font-size: 1rem; /* Titular/H4 */
+  font-weight: 700;
+  line-height: 1.375rem;
+}
+.tarjeta-mundo__cantidad {
+  color: var(--texto-secundario);
+  font-size: 0.875rem; /* Cuerpo/P */
+  line-height: 1.25rem;
+}
+
+@media (min-width: 56.25rem) {
+  .tarjeta-mundo {
+    --tarjeta-relleno: 16px;
+    --tarjeta-separacion: 12px;
+    --tarjeta-emblema: 44px;
+    --tarjeta-icono: 22px;
+  }
+}
