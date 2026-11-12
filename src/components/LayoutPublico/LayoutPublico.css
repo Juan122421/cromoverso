@@ -7,3 +7,8 @@
 .landing > main {
   flex: 1;
 }
+@media (max-width: 56.1875rem) {
+  .landing--catalogo .navbar {
+    display: none;
+  }
+}

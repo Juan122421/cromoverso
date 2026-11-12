@@ -5,6 +5,7 @@ import Inicio from "./pages/Inicio.jsx";
 import CatalogoMundo from "./pages/CatalogoMundo.jsx";
 import Provisional from "./pages/Provisional.jsx";
 import NoEncontrado from "./pages/NoEncontrado.jsx";
+import DetalleProvisional from "./pages/DetalleProvisional.jsx";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route index element={<Inicio />} />
           <Route path="mundos" element={<Provisional clave="mundos" />} />
           <Route path="mundos/:id" element={<CatalogoMundo />} />
+          <Route path="cromos/:id" element={<DetalleProvisional />} />
           <Route path="ingresar" element={<Provisional grupo="botones" clave="ingresar" />} />
           <Route path="registro" element={<Provisional grupo="botones" clave="crearCuenta" />} />
           <Route path="*" element={<NoEncontrado />} />
