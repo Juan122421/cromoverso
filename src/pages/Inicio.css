@@ -1,8 +1,8 @@
 /* ---------- Portada ---------- */
 .hero {
   --hero-rayos: 820px;
+  --hero-rayos-cx: 50%;
   --hero-rayos-cy: 50px;
-  --hero-rayos-cx:
   --hero-rayos-color: color-mix(in srgb, var(--marca-primario) 30%, transparent);
 
   position: relative;
