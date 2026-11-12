@@ -99,3 +99,46 @@ main:focus {
     display: none !important;
   }
 }
+
+/* Preferencias del panel de accesibilidad (data-* en <html>) */
+html[data-tamano-texto="grande"] {
+  font-size: 112.5%;
+}
+html[data-tamano-texto="muyGrande"] {
+  font-size: 125%;
+}
+html[data-alto-contraste="true"] {
+  --fondo-pagina: #ffffff;
+  --fondo-superficie: #ffffff;
+  --fondo-sutil: #f2f2f2;
+  --fondo-inverso: #000000;
+  --fondo-inverso-2: #000000;
+  --texto-principal: #000000;
+  --texto-secundario: #000000;
+  --texto-terciario: #000000;
+  --texto-marca: #3b00c4;
+  --marca-primario: #3b00c4;
+  --marca-primario-hover: #24008a;
+  --borde-sutil: #000000;
+  --borde-fuerte: #000000;
+  --borde-inverso: #ffffff;
+}
+html[data-reducir-movimiento="true"] *,
+html[data-reducir-movimiento="true"] *::before,
+html[data-reducir-movimiento="true"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+html[data-subrayar-enlaces="true"] a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+html[data-fuente-lectura-facil="true"] {
+  letter-spacing: 0.04em;
+  word-spacing: 0.08em;
+}
+html[data-fuente-lectura-facil="true"] * {
+  text-transform: none !important;
+  font-family: var(--fuente-rubik) !important;
+}

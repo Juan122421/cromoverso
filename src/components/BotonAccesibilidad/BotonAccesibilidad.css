@@ -18,7 +18,7 @@
 .boton-accesibilidad:hover {
   background: var(--fondo-sutil);
 }
-.boton-accesibilidad[aria-pressed="true"] {
+.boton-accesibilidad[aria-expanded="true"] {
   background: var(--marca-primario-suave);
 }
 .boton-accesibilidad:focus-visible {

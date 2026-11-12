@@ -127,7 +127,7 @@ export default function MenuMovil({ abierto, onCerrar, botonRef }) {
         </div>
         <div className="menu-movil__fila">
           <span>{t.secciones.accesibilidad}</span>
-          <BotonAccesibilidad />
+          <BotonAccesibilidad onAntesDeAbrir={onCerrar} />
         </div>
       </div>
 

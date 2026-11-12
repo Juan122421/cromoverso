@@ -68,6 +68,17 @@
   line-height: 1.25rem;
   text-decoration: none;
 }
+button.footer__enlace {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+button.footer__enlace:hover {
+  text-decoration: underline;
+}
 a.footer__enlace:hover {
   color: var(--texto-inverso);
   text-decoration: underline;

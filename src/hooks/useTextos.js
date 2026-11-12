@@ -3,7 +3,7 @@ import { API_URL } from "../config/api.js";
 
 const API = `${API_URL}/textos`;
 // Solo pedimos lo que la interfaz usa (el contrato permite ?seccion=)
-const SECCIONES = "navbar,menuMovil,idioma,cookies,footer,estados,errores,general,paginas,componentes,formularios";
+const SECCIONES = "navbar,menuMovil,idioma,cookies,footer,estados,errores,general,paginas,componentes,formularios,accesibilidad";
 
 // Un texto es válido solo si es string y no está vacío
 const esTexto = (valor) => typeof valor === "string" && valor.trim() !== "";
@@ -37,6 +37,20 @@ function validarTextos(datos) {
     "estados.mensajes.guardado": t?.estados?.mensajes?.guardado,
     "errores.generico": t?.errores?.generico,
     "general.aria.saltarAlContenido": t?.general?.aria?.saltarAlContenido,
+    "accesibilidad.titulo": t?.accesibilidad?.titulo,
+    "accesibilidad.botones.abrir": t?.accesibilidad?.botones?.abrir,
+    "accesibilidad.botones.restablecer": t?.accesibilidad?.botones?.restablecer,
+    "accesibilidad.tamanoTexto.titulo": t?.accesibilidad?.tamanoTexto?.titulo,
+    "accesibilidad.tamanoTexto.opciones.normal": t?.accesibilidad?.tamanoTexto?.opciones?.normal,
+    "accesibilidad.tamanoTexto.opciones.grande": t?.accesibilidad?.tamanoTexto?.opciones?.grande,
+    "accesibilidad.tamanoTexto.opciones.muyGrande": t?.accesibilidad?.tamanoTexto?.opciones?.muyGrande,
+    "accesibilidad.altoContraste.titulo": t?.accesibilidad?.altoContraste?.titulo,
+    "accesibilidad.reducirMovimiento.titulo": t?.accesibilidad?.reducirMovimiento?.titulo,
+    "accesibilidad.subrayarEnlaces.titulo": t?.accesibilidad?.subrayarEnlaces?.titulo,
+    "accesibilidad.fuenteLecturaFacil.titulo": t?.accesibilidad?.fuenteLecturaFacil?.titulo,
+    "accesibilidad.etiquetas.encendido": t?.accesibilidad?.etiquetas?.encendido,
+    "accesibilidad.etiquetas.apagado": t?.accesibilidad?.etiquetas?.apagado,
+    "accesibilidad.enlaces.declaracion": t?.accesibilidad?.enlaces?.declaracion,
   };
 
   const faltantes = Object.entries(requeridas)

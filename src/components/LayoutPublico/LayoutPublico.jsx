@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../Navbar/Navbar.jsx";
 import Footer from "../Footer/Footer.jsx";
 import GestorCookies from "../GestorCookies/GestorCookies.jsx";
+import PanelAccesibilidad from "../PanelAccesibilidad/PanelAccesibilidad.jsx";
 import SaltarContenido from "../SaltarContenido/SaltarContenido.jsx";
 import { usePreferencias } from "../../context/PreferenciasContext.jsx";
 import "./LayoutPublico.css";
@@ -25,6 +26,7 @@ export default function LayoutPublico() {
       {/* El aviso va antes del navbar para que el teclado llegue a él primero */}
       <GestorCookies />
       <Navbar tono={tono} />
+      <PanelAccesibilidad />
       <main id="contenido" tabIndex={-1}>
         <Outlet />
       </main>

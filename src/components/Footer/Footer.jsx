@@ -7,7 +7,7 @@ import { DESTINOS_PIE } from "../../config/destinos.js";
 const COLUMNAS = ["explora", "cuenta", "legal"];
 
 export default function Footer() {
-  const { textos } = usePreferencias();
+  const { textos, abrirPanelAccesibilidad } = usePreferencias();
   const t = textos?.footer;
   const logo = textos?.navbar?.logo;
   if (!t || !logo) return null;
@@ -37,7 +37,15 @@ export default function Footer() {
                       const destino = DESTINOS_PIE[enlace];
                       return (
                         <li key={enlace}>
-                          {destino ? (
+                          {enlace === "accesibilidad" ? (
+                            <button
+                              type="button"
+                              className="footer__enlace"
+                              onClick={abrirPanelAccesibilidad}
+                            >
+                              {etiqueta}
+                            </button>
+                          ) : destino ? (
                             <Link className="footer__enlace" to={destino}>
                               {etiqueta}
                             </Link>
