@@ -18,9 +18,9 @@ export default function LayoutPublico() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-
+  const esCatalogo = pathname.startsWith("/mundos/");
   return (
-    <div className="landing">
+    <div className={`landing${esCatalogo ? " landing--catalogo" : ""}`}>
       {textoSaltar && <SaltarContenido texto={textoSaltar} />}
       {/* El aviso va antes del navbar para que el teclado llegue a él primero */}
       <GestorCookies />

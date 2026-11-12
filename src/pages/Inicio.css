@@ -1,8 +1,8 @@
 /* ---------- Portada ---------- */
 .hero {
   --hero-rayos: 820px;
-  --hero-rayos-izq: 10px;
-  --hero-rayos-arriba: -360px;
+  --hero-rayos-cy: 50px;
+  --hero-rayos-cx:
   --hero-rayos-color: color-mix(in srgb, var(--marca-primario) 30%, transparent);
 
   position: relative;
@@ -14,8 +14,8 @@
 .hero__rayos {
   position: absolute;
   z-index: -1;
-  left: var(--hero-rayos-izq);
-  top: var(--hero-rayos-arriba);
+  left: calc(var(--hero-rayos-cx) - var(--hero-rayos) / 2);
+  top: calc(var(--hero-rayos-cy) - var(--hero-rayos) / 2);
   width: var(--hero-rayos);
   height: var(--hero-rayos);
   color: var(--hero-rayos-color); /* el SVG se pinta con currentColor */
@@ -89,8 +89,8 @@
 @media (min-width: 56.25rem) {
   .hero {
     --hero-rayos: 1500px;
-    --hero-rayos-izq: 380px;
-    --hero-rayos-arriba: -560px;
+    --hero-rayos-cx: 1130px;
+    --hero-rayos-cy: 190px;
   }
   .hero__interior {
     flex-direction: row;
