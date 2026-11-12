@@ -1,0 +1,51 @@
+.etiqueta-rareza {
+  --rareza-color: var(--rareza-comun);
+  --rareza-fondo: var(--fondo-superficie);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  padding: 4px 10px;
+  border: var(--borde-medio) solid var(--rareza-color);
+  border-radius: var(--radio-pildora);
+  color: var(--texto-principal);
+  background: var(--rareza-fondo);
+  font-family: var(--fuente-rubik);
+  font-size: 0.6875rem; /* Detalle/Etiqueta */
+  font-weight: 700;
+  line-height: 0.875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.etiqueta-rareza--rara {
+  --rareza-color: var(--rareza-rara);
+}
+.etiqueta-rareza--epica {
+  --rareza-color: var(--rareza-epica);
+}
+.etiqueta-rareza--legendaria {
+  --rareza-color: var(--rareza-legendaria);
+  --rareza-fondo: var(--rareza-legendaria-suave);
+}
+
+.etiqueta-rareza__icono {
+  display: flex;
+  width: 14px;
+  height: 14px;
+  color: var(--rareza-color);
+}
+.etiqueta-rareza__icono svg {
+  width: 100%;
+  height: 100%;
+}
+/* Igual que en las cartas: rara, épica y legendaria van rellenas; común, solo contorno */
+.etiqueta-rareza__icono svg,
+.etiqueta-rareza__icono svg * {
+  fill: currentColor;
+}
+.etiqueta-rareza--comun .etiqueta-rareza__icono svg,
+.etiqueta-rareza--comun .etiqueta-rareza__icono svg * {
+  fill: none;
+}
