@@ -19,7 +19,7 @@ export default function LayoutPublico() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-  const esCatalogo = pathname.startsWith("/mundos/");
+  const esCatalogo = pathname.startsWith("/mundos/") || pathname.startsWith("/cromos/");
   return (
     <div className={`landing${esCatalogo ? " landing--catalogo" : ""}`}>
       {textoSaltar && <SaltarContenido texto={textoSaltar} />}

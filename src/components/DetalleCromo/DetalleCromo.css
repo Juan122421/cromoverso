@@ -1,0 +1,409 @@
+.detalle {
+  /* Medidas del diseño que Figma no exporta como tokens */
+  --detalle-arriba: 104px;
+  --detalle-relleno: 40px;
+  --detalle-bloque: 20px;
+  --detalle-radio-modal: 28px;
+  --detalle-radio-carta: 20px;
+  --detalle-cerrar: var(--objetivo-minimo);
+  --detalle-icono-poder: 36px;
+  --detalle-carta-movil: 168px;
+  --detalle-rayos: 760px;
+  --detalle-velo: 1; /* en el móvil de Figma la capa oscura es sólida */
+  --detalle-tinta-mundo: color-mix(in srgb, var(--mundo-color) 70%, var(--fondo-inverso));
+  /* Barras de atributos (valores móviles; escritorio los cambia más abajo) */
+  --atributo-fila: 10px;
+  --atributo-etiqueta: 80px;
+  --atributo-separacion: 10px;
+  --atributo-valor: 34px;
+  --atributo-barra: 196px;
+
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow-y: auto;
+  color: var(--texto-principal);
+  font-family: var(--fuente-rubik);
+}
+.detalle :focus-visible {
+  outline: var(--anillo-foco) solid var(--marca-primario);
+  outline-offset: 3px;
+}
+.detalle__velo {
+  position: fixed;
+  inset: 0;
+  background: var(--fondo-inverso);
+  opacity: var(--detalle-velo);
+}
+
+/* ---------- Hoja inferior (móvil) ---------- */
+.detalle__dialogo {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-height: 90dvh;
+  overflow-y: auto;
+  padding: 10px var(--detalle-bloque) calc(26px + env(safe-area-inset-bottom, 0px));
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-bottom: 0;
+  border-radius: var(--detalle-radio-modal) var(--detalle-radio-modal) 0 0;
+  background: var(--fondo-superficie);
+  box-shadow: var(--sombra-flotante);
+}
+.detalle__asa {
+  align-self: center;
+  flex: none;
+  width: 44px;
+  height: 5px;
+  border-radius: var(--radio-pildora);
+  background: var(--borde-sutil);
+}
+.detalle__encabezado {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: var(--detalle-cerrar);
+}
+.detalle__cerrar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  box-sizing: border-box;
+  width: var(--detalle-cerrar);
+  height: var(--detalle-cerrar);
+  padding: 0;
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: 50%;
+  color: var(--texto-principal);
+  background: var(--fondo-superficie);
+  cursor: pointer;
+}
+.detalle__cerrar:hover {
+  background: var(--fondo-sutil);
+}
+/* «Cerrar (foco inicial)» de Figma: borde morado de 3 px */
+.detalle__cerrar:focus {
+  outline: none;
+  border: 3px solid var(--marca-primario);
+}
+
+.detalle__identidad {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-4);
+  padding-top: var(--espacio-2);
+}
+.detalle__carta-movil {
+  flex: none;
+  width: var(--detalle-carta-movil);
+}
+.detalle__datos {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+.detalle__id {
+  align-self: stretch;
+  margin: 0;
+  color: var(--texto-secundario);
+  font-family: var(--fuente-unbounded);
+  font-size: 0.875rem; /* Dato/Número de cromo */
+  font-weight: 700;
+  line-height: 1rem;
+}
+.detalle__nombre {
+  align-self: stretch;
+  margin: 0;
+  font-family: var(--fuente-unbounded);
+  font-size: 1.25rem; /* Titular/H3 */
+  font-weight: 600;
+  line-height: 1.625rem;
+  letter-spacing: normal;
+  overflow-wrap: anywhere;
+}
+.detalle__sub {
+  align-self: stretch;
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 0.875rem; /* Cuerpo/P */
+  line-height: 1.25rem;
+}
+
+/* ---------- Poder ---------- */
+.detalle__poder {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  padding: 14px;
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: var(--radio-l);
+  background: var(--mundo-suave);
+}
+.detalle__poder-icono {
+  display: flex;
+  grid-column: 1;
+  grid-row: 1;
+  color: var(--mundo-color);
+}
+.detalle__poder-titulo {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  color: var(--texto-secundario);
+  font-family: var(--fuente-rubik);
+  font-size: 0.6875rem; /* Detalle/Etiqueta */
+  font-weight: 700;
+  line-height: 0.875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.detalle__poder-valor {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 0;
+  font-size: 1rem; /* Cuerpo/M fuerte */
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+/* ---------- Atributos ---------- */
+.detalle__atributos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.detalle__atributos-cabecera {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+.detalle__atributos-titulo {
+  flex: 1;
+  margin: 0;
+  font-family: var(--fuente-rubik);
+  font-size: 1rem; /* Titular/H4 */
+  font-weight: 700;
+  line-height: 1.375rem;
+  letter-spacing: normal;
+}
+.detalle__total {
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+.detalle__atributos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--atributo-fila);
+  margin: 0;
+}
+.detalle__atributo {
+  display: flex;
+  align-items: center;
+  gap: var(--atributo-separacion);
+}
+.detalle__atributo-nombre {
+  flex: none;
+  width: var(--atributo-etiqueta);
+  font-size: 0.875rem; /* Cuerpo/P fuerte */
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+.detalle__atributo-medida {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--atributo-separacion);
+  min-width: 0;
+  margin: 0;
+}
+/* La barra se llena con valor % (55 → 55 %), como en Figma */
+.detalle__barra {
+  position: relative;
+  flex: 1;
+  box-sizing: border-box;
+  max-width: var(--atributo-barra);
+  height: 12px;
+  border: var(--borde-medio) solid var(--borde-fuerte);
+  border-radius: var(--radio-pildora);
+  background: var(--fondo-superficie);
+}
+.detalle__avance {
+  position: absolute;
+  top: calc(-1 * var(--borde-medio));
+  bottom: calc(-1 * var(--borde-medio));
+  left: calc(-1 * var(--borde-medio));
+  box-sizing: border-box;
+  width: calc((100% + 2 * var(--borde-medio)) * var(--valor) / 100);
+  border: var(--borde-medio) solid var(--borde-fuerte);
+  border-radius: var(--radio-pildora);
+  background: var(--mundo-color);
+}
+.detalle__numero {
+  flex: none;
+  width: var(--atributo-valor);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  text-align: right;
+}
+.detalle__escala {
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 0.75rem; /* Detalle/Nota */
+  line-height: 1rem;
+}
+
+/* ---------- Diálogo centrado (escritorio) ---------- */
+@media (min-width: 56.25rem) {
+  .detalle {
+    --detalle-velo: 0.82;
+    --detalle-cerrar: 46px;
+    --atributo-fila: var(--espacio-3);
+    --atributo-etiqueta: 96px;
+    --atributo-separacion: var(--espacio-4);
+    --atributo-valor: 40px;
+    --atributo-barra: 340px;
+
+    align-items: flex-start;
+    padding: var(--detalle-arriba) var(--espacio-4) var(--espacio-6);
+  }
+  .detalle__dialogo {
+    flex-direction: row;
+    gap: var(--detalle-relleno);
+    width: min(62.5rem, 100%);
+    max-height: none;
+    overflow: visible;
+    padding: var(--detalle-relleno);
+    border: var(--borde-grosor) solid var(--borde-fuerte);
+    border-radius: var(--detalle-radio-modal);
+  }
+
+  /* Panel de la carta, con el color del mundo */
+  .detalle__carta {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 316px;
+    min-height: 420px;
+    padding: var(--detalle-relleno) 36px;
+    overflow: hidden;
+    border: var(--borde-grosor) solid var(--borde-fuerte);
+    border-radius: var(--detalle-radio-carta);
+    background: var(--mundo-color);
+  }
+  .detalle__rayos {
+    position: absolute;
+    z-index: -1;
+    left: -230px;
+    top: -170px;
+    width: var(--detalle-rayos);
+    height: var(--detalle-rayos);
+    color: color-mix(in srgb, var(--fondo-inverso) 30%, transparent);
+    opacity: 0.16;
+    pointer-events: none;
+  }
+
+  /* Columna de información */
+  .detalle__info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--detalle-bloque);
+    min-width: 0;
+  }
+  .detalle__etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espacio-2);
+    min-height: var(--detalle-cerrar);
+  }
+  .detalle__espacio {
+    flex: 1;
+  }
+  .detalle__titulo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-1);
+  }
+  .detalle__ubicacion {
+    margin: 0;
+    color: var(--texto-secundario);
+    font-size: 0.75rem; /* Detalle/Nota fuerte */
+    font-weight: 600;
+    line-height: 1rem;
+  }
+  .detalle__nombre {
+    font-size: 2.5rem; /* Titular/H1 */
+    font-weight: 700;
+    line-height: 2.875rem;
+    letter-spacing: -1px;
+  }
+  .detalle__descripcion {
+    margin: 0;
+    color: var(--texto-secundario);
+    font-size: 1rem; /* Cuerpo/M */
+    line-height: 1.5rem;
+  }
+  .detalle__vecinos {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-2);
+    min-height: 32px;
+  }
+
+  /* Poder: el icono en círculo a la izquierda */
+  .detalle__poder {
+    column-gap: var(--espacio-3);
+    row-gap: 2px;
+    padding: var(--espacio-4);
+  }
+  .detalle__poder-icono {
+    grid-row: 1 / span 2;
+    align-items: center;
+    justify-content: center;
+    width: var(--detalle-icono-poder);
+    height: var(--detalle-icono-poder);
+    border-radius: 50%;
+    color: var(--texto-inverso);
+    background: var(--mundo-color);
+  }
+  .detalle__poder-titulo {
+    color: var(--detalle-tinta-mundo);
+  }
+  .detalle__poder-valor {
+    grid-column: 2;
+  }
+
+  /* Atributos: panel con fondo suave */
+  .detalle__atributos {
+    gap: var(--espacio-3);
+    padding: var(--detalle-bloque);
+    border-radius: var(--radio-l);
+    background: var(--fondo-sutil);
+  }
+  .detalle__numero {
+    font-size: 1rem; /* Titular/H4 */
+    font-weight: 700;
+    line-height: 1.375rem;
+  }
+}
