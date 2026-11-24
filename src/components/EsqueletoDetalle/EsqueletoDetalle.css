@@ -1,0 +1,37 @@
+.esq-detalle__poder {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  padding: 14px;
+  border: var(--borde-grosor) solid var(--borde-sutil);
+  border-radius: var(--radio-l);
+  background: var(--fondo-sutil);
+}
+.esq-detalle__texto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+.esq-detalle__etiqueta {
+  flex: none;
+  width: var(--atributo-etiqueta);
+  height: 1.25rem;
+}
+.esq-detalle__barra {
+  flex: 1;
+  max-width: var(--atributo-barra);
+  height: 12px;
+  border-radius: var(--radio-pildora);
+}
+.esq-detalle__valor {
+  flex: none;
+  width: var(--atributo-valor);
+  height: 1.25rem;
+}
+
+@media (min-width: 56.25rem) {
+  .esq-detalle__poder {
+    padding: var(--espacio-4);
+  }
+}

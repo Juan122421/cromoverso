@@ -21,6 +21,10 @@ import { useMediaQuery } from "../hooks/useMediaQuery.js";
 import { useTitulo } from "../hooks/useTitulo.js";
 import { pedir } from "../services/api.js";
 import { formatear, plural } from "../utils/formatear.js";
+import EsqueletoCatalogo, { EsqueletoCartas } from "../components/EsqueletoCatalogo/EsqueletoCatalogo.jsx";
+import EsqueletoDetalle from "../components/EsqueletoDetalle/EsqueletoDetalle.jsx";
+import EstadoError from "../components/EstadoError/EstadoError.jsx";
+import EstadoVista from "../components/EstadoVista/EstadoVista.jsx";
 
 const ESCRITORIO = "(min-width: 56.25rem)";
 // Valores que acepta la API en los filtros (contrato, sección 4)
@@ -84,17 +88,20 @@ export default function CatalogoMundo() {
     cromo && tDetalle ? formatear(tDetalle.seo.descripcion, { poder: cromo.poder }) : null,
   );
 
-  const abierto = Boolean(cromoId && cromo && cargada);
+  // La vista se puede dibujar cuando llegaron los datos del mundo y los textos de la API
+  const preparado = Boolean(cargada && textos);
+  const abierto = Boolean(cromoId && cromo && preparado);
 
-  // Con el detalle abierto, el catálogo de fondo queda inerte (sin foco ni clics)
+  // Con el detalle (o su esqueleto) encima, el catálogo de fondo queda inerte
   useEffect(() => {
-    if (fondo.current) fondo.current.inert = abierto;
-  }, [abierto, cargada]);
+    if (fondo.current) fondo.current.inert = Boolean(cromoId);
+  }, [cromoId, preparado]);
 
   const cerrar = useCallback(() => {
-    // Si se llegó desde el catálogo, se vuelve atrás; si no, al catálogo de su mundo
+    // Si se llegó desde el catálogo, se vuelve atrás; si no, al catálogo de su mundo (o al inicio)
     if (state?.desdeCatalogo) navigate(-1);
-    else navigate({ pathname: `/mundos/${mundoId}`, search }, { replace: true });
+    else if (mundoId) navigate({ pathname: `/mundos/${mundoId}`, search }, { replace: true });
+    else navigate("/", { replace: true });
   }, [state, navigate, mundoId, search]);
 
   // El foco vuelve a la carta que se abrió
@@ -108,36 +115,28 @@ export default function CatalogoMundo() {
   // Un mundo o un cromo que no existe: página de no encontrado
   if ((cromoId && detalle.codigo === 404) || base.codigo === 404) return <NoEncontrado />;
 
-  const falla = (cromoId && detalle.error) || base.error;
-  if (falla) {
+  // La API falló: error con su mensaje y botón para reintentar
+  const fallo = (cromoId && detalle.fallo) || base.fallo;
+  if (fallo) {
     return (
       <section className="pagina">
-        <div role="alert">
-          <h1>{estados?.error?.titulo}</h1>
-          <p>{estados?.error?.texto}</p>
-          <Boton
-            onClick={() => {
-              if (detalle.error) detalle.reintentar();
-              if (base.error) base.reintentar();
-            }}
-          >
-            {estados?.error?.botones?.reintentar}
-          </Boton>
-        </div>
+        <EstadoError
+          fallo={fallo}
+          conInicio
+          onReintentar={() => {
+            if (detalle.fallo) detalle.reintentar();
+            if (base.fallo) base.reintentar();
+          }}
+        />
       </section>
     );
   }
 
-  if (!cargada) {
-    return (
-      <section className="pagina">
-        <p role="status">{estados?.cargando}</p>
-      </section>
-    );
-  }
+  // Cargando el catálogo: esqueleto de la página completa
+  if (!cromoId && !preparado) return <EsqueletoCatalogo texto={estados?.cargando} />;
 
   // Vecinos del cromo dentro del mismo mundo (en el primero no hay anterior; en el último, siguiente)
-  const cromosDelMundo = cargada.mundo.cromos ?? [];
+  const cromosDelMundo = cargada?.mundo.cromos ?? [];
   const posicion = cromo ? cromosDelMundo.findIndex((item) => item.id === cromo.id) : -1;
   const anterior = posicion > 0 ? cromosDelMundo[posicion - 1] : null;
   const siguiente =
@@ -145,14 +144,19 @@ export default function CatalogoMundo() {
 
   return (
     <>
-      <div ref={fondo}>
-        <Catalogo key={mundoId} mundoId={mundoId} base={cargada} sinTitulo={Boolean(cromoId)} />
-      </div>
+      {preparado && (
+        <div ref={fondo}>
+          <Catalogo key={mundoId} mundoId={mundoId} base={cargada} sinTitulo={Boolean(cromoId)} />
+        </div>
+      )}
 
-      {cromoId && !cromo && (
-        <p className="solo-lectores" role="status">
-          {estados?.cargando}
-        </p>
+      {/* Cargando el detalle: esqueleto del diálogo (con botón para cerrar) */}
+      {cromoId && !abierto && (
+        <EsqueletoDetalle
+          texto={estados?.cargando}
+          textoCerrar={tDetalle?.botones?.cerrar}
+          onCerrar={cerrar}
+        />
       )}
 
       {abierto && (
@@ -460,32 +464,31 @@ function Catalogo({ mundoId, base, sinTitulo }) {
 
         <section className="catalogo__album" aria-label={mundo.nombre}>
           {escritorio ? herramientas : filtrosMovil}
-
-          {/* Anuncia a los lectores de pantalla cuántos cromos coinciden */}
+                    {/* Anuncia a los lectores de pantalla cuántos cromos coinciden */}
           <p className="solo-lectores" role="status">
-            {lista.datos ? plural(t.filtros.cantidad, visibles.length) : ""}
+            {lista.datos && !lista.cargando && !lista.fallo
+              ? plural(t.filtros.cantidad, visibles.length)
+              : ""}
           </p>
 
-          <div className="catalogo__casillas">
-            {lista.error && !lista.datos && (
-              <div className="catalogo__estado" role="alert">
-                <p>
-                  <strong>{estados?.error?.titulo}</strong>
+          <div className="catalogo__casillas" aria-busy={lista.cargando}>
+            {/* Cargando: esqueletos de las 20 cartas */}
+            {lista.cargando && (
+              <>
+                <p className="solo-lectores" role="status">
+                  {formatear(estados?.cargandoMundo, { mundo: mundo.nombre })}
                 </p>
-                <p>{estados?.error?.texto}</p>
-                <Boton variante="secundario" onClick={lista.reintentar}>
-                  {estados?.error?.botones?.reintentar}
-                </Boton>
-              </div>
+                <EsqueletoCartas />
+              </>
             )}
 
-            {lista.cargando && !lista.datos && !lista.error && (
-              <p className="catalogo__estado" role="status">
-                {formatear(estados?.cargandoMundo, { mundo: mundo.nombre })}
-              </p>
+            {/* Error: el mensaje sale de errores[codigo] y el botón vuelve a pedir los cromos */}
+            {!lista.cargando && lista.fallo && (
+              <EstadoError fallo={lista.fallo} onReintentar={lista.reintentar} />
             )}
 
-            {visibles.length > 0 && (
+            {/* Resultados */}
+            {!lista.cargando && !lista.fallo && visibles.length > 0 && (
               <ul className="catalogo__lista">
                 {visibles.map((cromo) => (
                   <li key={cromo.id}>
@@ -513,14 +516,18 @@ function Catalogo({ mundoId, base, sinTitulo }) {
               </ul>
             )}
 
-            {lista.datos && visibles.length === 0 && (
-              <div className="catalogo__estado catalogo__vacio">
-                <h2>{t.vacio.titulo}</h2>
-                <p>{t.vacio.texto}</p>
+            {/* Vacío: ningún cromo coincide con los filtros */}
+            {!lista.cargando && !lista.fallo && lista.datos && visibles.length === 0 && (
+              <EstadoVista
+                rol="status"
+                icono="filtro"
+                titulo={t.vacio.titulo}
+                texto={t.vacio.texto}
+              >
                 <Boton variante="secundario" onClick={quitarFiltros}>
                   {t.vacio.botones.limpiar}
                 </Boton>
-              </div>
+              </EstadoVista>
             )}
           </div>
         </section>
