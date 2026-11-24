@@ -1,0 +1,6 @@
+.esqueleto--circulo {
+  border-radius: 50%;
+}
+.esqueleto--pildora {
+  border-radius: var(--radio-pildora);
+}
