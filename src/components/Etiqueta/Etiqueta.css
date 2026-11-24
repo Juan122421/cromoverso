@@ -1,0 +1,33 @@
+.etiqueta {
+  --etiqueta-fondo: var(--fondo-sutil);
+  --etiqueta-texto: var(--texto-secundario);
+
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 4px 10px;
+  border-radius: var(--radio-pildora);
+  color: var(--etiqueta-texto);
+  background: var(--etiqueta-fondo);
+  font-family: var(--fuente-rubik);
+  font-size: 0.75rem; /* Detalle/Nota fuerte */
+  font-weight: 600;
+  line-height: 1rem;
+  white-space: nowrap;
+}
+.etiqueta--marca {
+  --etiqueta-fondo: var(--marca-primario-suave);
+  --etiqueta-texto: var(--texto-marca);
+}
+.etiqueta--alerta {
+  --etiqueta-fondo: var(--estado-alerta-suave);
+  --etiqueta-texto: var(--estado-alerta);
+}
+.etiqueta--mundo {
+  --etiqueta-fondo: var(--mundo-suave, var(--marca-primario-suave));
+  --etiqueta-texto: color-mix(
+    in srgb,
+    var(--mundo-color, var(--marca-primario)) 70%,
+    var(--fondo-inverso)
+  );
+}
