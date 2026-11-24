@@ -51,6 +51,14 @@ function validarTextos(datos) {
     "accesibilidad.etiquetas.encendido": t?.accesibilidad?.etiquetas?.encendido,
     "accesibilidad.etiquetas.apagado": t?.accesibilidad?.etiquetas?.apagado,
     "accesibilidad.enlaces.declaracion": t?.accesibilidad?.enlaces?.declaracion,
+    "estados.cargando": t?.estados?.cargando,
+    "estados.cargandoMundo": t?.estados?.cargandoMundo,
+    "estados.error.titulo": t?.estados?.error?.titulo,
+    "estados.error.texto": t?.estados?.error?.texto,
+    "estados.error.botones.reintentar": t?.estados?.error?.botones?.reintentar,
+    "estados.sinConexion.titulo": t?.estados?.sinConexion?.titulo,
+    "estados.sinConexion.texto": t?.estados?.sinConexion?.texto,
+    "estados.noEncontrado.botones.irAlInicio": t?.estados?.noEncontrado?.botones?.irAlInicio,
   };
 
   const faltantes = Object.entries(requeridas)
