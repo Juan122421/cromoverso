@@ -98,3 +98,30 @@
   box-shadow: none;
   cursor: not-allowed;
 }
+
+/* Enviando (Figma «Ingresando…»): 80 % de opacidad, indicador de 18 px y sin reaccionar al cursor */
+.boton--cargando {
+  opacity: 0.8;
+  cursor: progress;
+  pointer-events: none;
+}
+.boton__indicador {
+  flex: none;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: boton-giro 0.8s linear infinite;
+}
+.boton--p .boton__indicador {
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
+}
+@keyframes boton-giro {
+  to {
+    transform: rotate(360deg);
+  }
+}
