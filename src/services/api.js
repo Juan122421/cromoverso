@@ -1,40 +1,67 @@
 import { API_URL } from "../config/api.js";
 import { cabecerasDeSimulacion } from "./simulacion.js";
 
-// Error de una petición a la API:
-//  · estado      → código HTTP (404, 503…)
-//  · codigo      → código de la API (falla_simulada…): sirve para buscar textos.errores[codigo]
-//  · campos      → mensajes por campo (errores 422)
-//  · sinConexion → no hubo respuesta (sin red)
 export class ErrorDeApi extends Error {
-  constructor(mensaje, { estado = null, codigo = null, campos = null, sinConexion = false } = {}) {
+  constructor(
+    mensaje,
+    { estado = null, codigo = null, campos = null, reintentarEn = null, sinConexion = false } = {},
+  ) {
     super(mensaje);
     this.name = "ErrorDeApi";
     this.estado = estado;
     this.codigo = codigo;
     this.campos = campos;
+    this.reintentarEn = reintentarEn;
     this.sinConexion = sinConexion;
   }
 }
 
-// Pide una ruta de la API y devuelve el JSON. Falla si la respuesta no es 2xx.
-export async function pedir(ruta, signal) {
+async function solicitar(ruta, { metodo = "GET", cuerpo, signal } = {}) {
+  const cabeceras = { ...cabecerasDeSimulacion() };
+  if (cuerpo !== undefined) cabeceras["Content-Type"] = "application/json";
+
   let respuesta;
   try {
-    respuesta = await fetch(`${API_URL}${ruta}`, { signal, headers: cabecerasDeSimulacion() });
+    respuesta = await fetch(`${API_URL}${ruta}`, {
+      method: metodo,
+      headers: cabeceras,
+      body: cuerpo !== undefined ? JSON.stringify(cuerpo) : undefined,
+      signal,
+    });
   } catch (fallo) {
     if (fallo.name === "AbortError") throw fallo; // petición cancelada a propósito
     throw new ErrorDeApi(`Sin respuesta en ${ruta}`, { sinConexion: true });
   }
 
+  if (respuesta.status === 204) return null; // sin contenido (por ejemplo, cerrar sesión)
+
+  let datos = null;
+  try {
+    datos = await respuesta.json();
+  } catch {
+    datos = null;
+  }
+
   if (!respuesta.ok) {
     // Todos los errores de la API tienen la misma forma: { error: { codigo, mensaje, campos } }
-    const cuerpo = await respuesta.json().catch(() => null);
+    const espera = Number.parseInt(respuesta.headers.get("Retry-After"), 10);
     throw new ErrorDeApi(`HTTP ${respuesta.status} en ${ruta}`, {
       estado: respuesta.status,
-      codigo: cuerpo?.error?.codigo ?? null,
-      campos: cuerpo?.error?.campos ?? null,
+      codigo: datos?.error?.codigo ?? null,
+      campos: datos?.error?.campos ?? null,
+      reintentarEn: Number.isFinite(espera) ? espera : null,
     });
   }
-  return respuesta.json();
+  if (datos === null) {
+    throw new ErrorDeApi(`Respuesta inválida en ${ruta}`, {
+      estado: respuesta.status,
+      codigo: "respuesta_invalida",
+    });
+  }
+  return datos;
 }
+
+export const pedir = (ruta, signal) => solicitar(ruta, { signal });
+export const enviar = (ruta, cuerpo, { metodo = "POST", signal } = {}) =>
+  solicitar(ruta, { metodo, cuerpo, signal });
+export const eliminar = (ruta, signal) => solicitar(ruta, { metodo: "DELETE", signal });
