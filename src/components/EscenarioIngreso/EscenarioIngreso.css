@@ -1,0 +1,151 @@
+.escenario {
+  --abanico-zoom: 0.55;
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: var(--espacio-5) var(--espacio-4);
+  color: var(--texto-inverso);
+  background: var(--fondo-inverso);
+  font-family: var(--fuente-rubik);
+}
+.escenario__rayos {
+  position: absolute;
+  z-index: -1;
+  top: -300px;
+  left: -150px;
+  width: 820px;
+  height: 820px;
+  color: color-mix(in srgb, var(--marca-primario) 30%, transparent);
+  pointer-events: none;
+}
+
+/* Marca más pequeña en móvil, como en el navbar */
+.escenario .marca {
+  --marca-emblema: 28.8px;
+  --marca-estrella: 16px;
+  --marca-grosor: 1.6px;
+  --marca-fuente: 1rem;
+  --marca-linea: 1.3125rem;
+  --marca-separacion: var(--espacio-2);
+
+  align-self: flex-start;
+}
+
+/* Abanico: lienzo de 600 × 420 px; el zoom lo ajusta a cada ancho */
+.escenario__abanico {
+  position: relative;
+  flex: none;
+  align-self: flex-start;
+  width: 600px;
+  height: 420px;
+  zoom: var(--abanico-zoom);
+}
+.escenario__carta {
+  position: absolute;
+  width: 240px;
+}
+.escenario__carta--izquierda {
+  top: 41.4px;
+  left: 52.3px;
+  z-index: 1;
+  transform: rotate(-12deg);
+}
+.escenario__carta--derecha {
+  top: 41.3px;
+  left: 282.5px;
+  z-index: 2;
+  transform: rotate(12deg);
+}
+.escenario__carta--centro {
+  top: 10px;
+  left: 180px;
+  z-index: 3;
+}
+/* En móvil el diseño solo muestra dos cartas */
+@media (max-width: 56.1875rem) {
+  .escenario__carta--derecha {
+    display: none;
+  }
+}
+
+.escenario__lema {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  max-width: 600px;
+}
+.escenario__titulo {
+  margin: 0;
+  font-family: var(--fuente-unbounded);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 2.25rem;
+  letter-spacing: -1px;
+}
+.escenario__frase {
+  display: block;
+}
+.escenario__texto {
+  display: none;
+  margin: 0;
+  color: var(--texto-inverso-suave);
+  font-size: 1rem; /* Cuerpo/M */
+  line-height: 1.5rem;
+}
+
+/* ---------- Escritorio: mitad izquierda de la pantalla ---------- */
+@media (min-width: 56.25rem) {
+  .escenario {
+    --abanico-zoom: 0.58;
+
+    justify-content: space-between;
+    gap: var(--espacio-5);
+    padding: 40px;
+  }
+  .escenario__rayos {
+    top: -360px;
+    left: -340px;
+    width: 1400px;
+    height: 1400px;
+  }
+  .escenario .marca {
+    --marca-emblema: 36px;
+    --marca-estrella: 20px;
+    --marca-grosor: var(--borde-grosor);
+    --marca-fuente: 1.25rem;
+    --marca-linea: 1.625rem;
+    --marca-separacion: 10px;
+  }
+  .escenario__titulo {
+    font-size: 2.5rem; /* Titular/H1 */
+    line-height: 2.875rem;
+  }
+  .escenario__texto {
+    display: block;
+  }
+}
+@media (min-width: 68.75rem) {
+  .escenario {
+    --abanico-zoom: 0.75;
+
+    padding: 48px;
+  }
+}
+@media (min-width: 80rem) {
+  .escenario {
+    --abanico-zoom: 0.88;
+
+    padding: 48px 56px 56px;
+  }
+}
+@media (min-width: 90rem) {
+  .escenario {
+    --abanico-zoom: 1;
+  }
+}
