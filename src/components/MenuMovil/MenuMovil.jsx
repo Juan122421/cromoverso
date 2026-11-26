@@ -7,29 +7,24 @@ import Marca from "../Marca/Marca.jsx";
 import SelectorIdioma from "../SelectorIdioma/SelectorIdioma.jsx";
 import BotonAccesibilidad from "../BotonAccesibilidad/BotonAccesibilidad.jsx";
 import { usePreferencias } from "../../context/PreferenciasContext.jsx";
-import { DESTINOS } from "../../config/destinos.js";
 import { useSesion } from "../../context/SesionContext.jsx";
+import { useCerrarSesion } from "../../hooks/useCerrarSesion.js";
+import { DESTINOS } from "../../config/destinos.js";
+import { textoDeError } from "../../utils/errores.js";
+import { iniciales, nombreVisible } from "../../utils/usuario.js";
 
-const ENFOCABLES =
-  'a[href], button:not([disabled]), input, select, [tabindex]:not([tabindex="-1"])';
+const ENFOCABLES = 'a[href], button:not([disabled]), input, select, [tabindex]:not([tabindex="-1"])';
 const ESCRITORIO = "(min-width: 56.25rem)";
 
 export default function MenuMovil({ abierto, onCerrar, botonRef }) {
   const { textos } = usePreferencias();
+  const { usuario } = useSesion();
+  const { cerrar, enviando, error } = useCerrarSesion();
   const panel = useRef(null);
   const botonCerrar = useRef(null);
   const t = textos?.menuMovil;
   const logo = textos?.navbar?.logo;
 
-  const { usuario, cerrarSesion } = useSesion();
-  async function salir() {
-    onCerrar();
-    try {
-      await cerrarSesion();
-    } catch (fallo) {
-      console.error("No se pudo cerrar la sesión:", fallo);
-    }
-  }
   useEffect(() => {
     if (!abierto) return undefined;
     const raiz = panel.current;
@@ -76,6 +71,11 @@ export default function MenuMovil({ abierto, onCerrar, botonRef }) {
 
   if (!t || !logo) return null;
   const enlaces = Object.keys(DESTINOS).filter((clave) => t.enlaces?.[clave]);
+  const nombre = nombreVisible(usuario);
+
+  async function salir() {
+    if (await cerrar()) onCerrar();
+  }
 
   return (
     <div
@@ -115,13 +115,9 @@ export default function MenuMovil({ abierto, onCerrar, botonRef }) {
                     <span className="menu-movil__icono">
                       <Icono nombre={DESTINOS[clave].icono} tamano={24} />
                     </span>
-                    <span className="menu-movil__texto">
-                      {t.enlaces[clave]}
-                    </span>
+                    <span className="menu-movil__texto">{t.enlaces[clave]}</span>
                     {isActive ? (
-                      <span className="menu-movil__aqui">
-                        {t.aria.estasAqui}
-                      </span>
+                      <span className="menu-movil__aqui">{t.aria.estasAqui}</span>
                     ) : (
                       <span className="menu-movil__chevron">
                         <Icono nombre="chevronDer" tamano={20} />
@@ -142,31 +138,40 @@ export default function MenuMovil({ abierto, onCerrar, botonRef }) {
         </div>
         <div className="menu-movil__fila">
           <span>{t.secciones.accesibilidad}</span>
-          <BotonAccesibilidad onAntesDeAbrir={onCerrar} />
+          <BotonAccesibilidad />
         </div>
       </div>
 
-      <div className="menu-movil__sesion">
-        {usuario ? (
-          <Boton variante="secundario" tamano="m" onClick={salir}>
+      {usuario && error && (
+        <p className="menu-movil__error" role="alert">
+          <Icono nombre="alerta" tamano={14} />
+          {textoDeError(error, textos)}
+        </p>
+      )}
+
+      {usuario ? (
+        <div className="menu-movil__sesion menu-movil__sesion--activa">
+          <span className="menu-movil__avatar" aria-hidden="true">
+            {iniciales(nombre)}
+          </span>
+          <div className="menu-movil__usuario">
+            <p className="menu-movil__nombre">{nombre}</p>
+            <p className="menu-movil__alias">@{usuario.alias}</p>
+          </div>
+          <Boton variante="secundario" tamano="p" icono="salir" cargando={enviando} onClick={salir}>
             {t.botones.cerrarSesion}
           </Boton>
-        ) : (
-          <>
-            <Boton
-              variante="secundario"
-              tamano="m"
-              to="/ingresar"
-              onClick={onCerrar}
-            >
-              {t.botones.ingresar}
-            </Boton>
-            <Boton tamano="m" to="/registro" onClick={onCerrar}>
-              {t.botones.crearCuenta}
-            </Boton>
-          </>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="menu-movil__sesion">
+          <Boton variante="secundario" tamano="m" to="/ingresar" onClick={onCerrar}>
+            {t.botones.ingresar}
+          </Boton>
+          <Boton tamano="m" to="/registro" onClick={onCerrar}>
+            {t.botones.crearCuenta}
+          </Boton>
+        </div>
+      )}
     </div>
   );
 }
