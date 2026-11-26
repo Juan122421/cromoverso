@@ -85,3 +85,11 @@
   outline: var(--anillo-foco) solid var(--marca-primario);
   outline-offset: 1px;
 }
+.campo__entrada:disabled {
+  opacity: var(--opacidad-deshabilitado);
+  cursor: not-allowed;
+}
+.campo__ver:disabled {
+  opacity: var(--opacidad-deshabilitado);
+  cursor: not-allowed;
+}
