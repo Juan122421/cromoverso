@@ -1,0 +1,47 @@
+.cuenta-navbar {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+.cuenta-navbar__avatar {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: 50%;
+  color: var(--texto-principal);
+  background: var(--marca-acento);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1;
+}
+/* Móvil: el nombre solo para lectores de pantalla */
+.cuenta-navbar__nombre {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+@media (max-width: 56.1875rem) {
+  .navbar--oscuro .cuenta-navbar__avatar {
+    border-color: var(--texto-inverso);
+  }
+}
+@media (min-width: 56.25rem) {
+  .cuenta-navbar__nombre {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    font-size: 0.875rem; /* Cuerpo/P fuerte */
+    font-weight: 600;
+    line-height: 1.25rem;
+  }
+}

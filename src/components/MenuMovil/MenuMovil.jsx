@@ -8,8 +8,10 @@ import SelectorIdioma from "../SelectorIdioma/SelectorIdioma.jsx";
 import BotonAccesibilidad from "../BotonAccesibilidad/BotonAccesibilidad.jsx";
 import { usePreferencias } from "../../context/PreferenciasContext.jsx";
 import { DESTINOS } from "../../config/destinos.js";
+import { useSesion } from "../../context/SesionContext.jsx";
 
-const ENFOCABLES = 'a[href], button:not([disabled]), input, select, [tabindex]:not([tabindex="-1"])';
+const ENFOCABLES =
+  'a[href], button:not([disabled]), input, select, [tabindex]:not([tabindex="-1"])';
 const ESCRITORIO = "(min-width: 56.25rem)";
 
 export default function MenuMovil({ abierto, onCerrar, botonRef }) {
@@ -19,6 +21,15 @@ export default function MenuMovil({ abierto, onCerrar, botonRef }) {
   const t = textos?.menuMovil;
   const logo = textos?.navbar?.logo;
 
+  const { usuario, cerrarSesion } = useSesion();
+  async function salir() {
+    onCerrar();
+    try {
+      await cerrarSesion();
+    } catch (fallo) {
+      console.error("No se pudo cerrar la sesión:", fallo);
+    }
+  }
   useEffect(() => {
     if (!abierto) return undefined;
     const raiz = panel.current;
@@ -104,9 +115,13 @@ export default function MenuMovil({ abierto, onCerrar, botonRef }) {
                     <span className="menu-movil__icono">
                       <Icono nombre={DESTINOS[clave].icono} tamano={24} />
                     </span>
-                    <span className="menu-movil__texto">{t.enlaces[clave]}</span>
+                    <span className="menu-movil__texto">
+                      {t.enlaces[clave]}
+                    </span>
                     {isActive ? (
-                      <span className="menu-movil__aqui">{t.aria.estasAqui}</span>
+                      <span className="menu-movil__aqui">
+                        {t.aria.estasAqui}
+                      </span>
                     ) : (
                       <span className="menu-movil__chevron">
                         <Icono nombre="chevronDer" tamano={20} />
@@ -132,12 +147,25 @@ export default function MenuMovil({ abierto, onCerrar, botonRef }) {
       </div>
 
       <div className="menu-movil__sesion">
-        <Boton variante="secundario" tamano="m" to="/ingresar" onClick={onCerrar}>
-          {t.botones.ingresar}
-        </Boton>
-        <Boton tamano="m" to="/registro" onClick={onCerrar}>
-          {t.botones.crearCuenta}
-        </Boton>
+        {usuario ? (
+          <Boton variante="secundario" tamano="m" onClick={salir}>
+            {t.botones.cerrarSesion}
+          </Boton>
+        ) : (
+          <>
+            <Boton
+              variante="secundario"
+              tamano="m"
+              to="/ingresar"
+              onClick={onCerrar}
+            >
+              {t.botones.ingresar}
+            </Boton>
+            <Boton tamano="m" to="/registro" onClick={onCerrar}>
+              {t.botones.crearCuenta}
+            </Boton>
+          </>
+        )}
       </div>
     </div>
   );
