@@ -144,4 +144,8 @@
   .navbar .solo-movil {
     display: none;
   }
+  .navbar__espera {
+  width: 40px;
+  height: 40px;
+}
 }

@@ -9,6 +9,7 @@ import { useTitulo } from "../hooks/useTitulo.js";
 import { pedir } from "../services/api.js";
 import { formatear } from "../utils/formatear.js";
 import Rayos from "../assets/rayos/rayos.svg?react";
+import { useSesion } from "../context/SesionContext.jsx";
 
 // Posición (en la lista de mundos) del mundo cuyo guardián va en cada carta
 // de la portada: izquierda, centro y derecha. Los datos salen de la API.
@@ -41,6 +42,7 @@ async function cargarInicio(signal) {
 
 export default function Inicio() {
   const { textos } = usePreferencias();
+  const { usuario } = useSesion();
 
   const { datos, cargando, error, reintentar } = useDatos(
     cargarInicio,
@@ -68,7 +70,11 @@ export default function Inicio() {
     <>
       {/* ---------- Portada ---------- */}
       <section className="hero" aria-labelledby="hero-titulo">
-        <Rayos className="hero__rayos" aria-hidden="true" focusable="false" />
+        <Rayos
+          className="hero__rayos"
+          aria-hidden="true"
+          focusable="false"
+        />
 
         <div className="hero__interior">
           <div className="hero__bienvenida">
@@ -81,15 +87,17 @@ export default function Inicio() {
             </p>
 
             <div className="hero__acciones">
-              <Boton
-                variante="acento"
-                tamano="g"
-                icono="regalo"
-                to="/registro"
-                className="hero__boton"
-              >
-                {t.hero.botones.crearCuentaGratis}
-              </Boton>
+              {!usuario && (
+                <Boton
+                  variante="acento"
+                  tamano="g"
+                  icono="regalo"
+                  to="/registro"
+                  className="hero__boton"
+                >
+                  {t.hero.botones.crearCuentaGratis}
+                </Boton>
+              )}
 
               <Boton
                 variante="secundario"
@@ -102,13 +110,15 @@ export default function Inicio() {
               </Boton>
             </div>
 
-            <p className="hero__nota ocultar-movil">
-              <span className="hero__nota-icono">
-                <Icono nombre="destellos" tamano={18} />
-              </span>
+            {!usuario && (
+              <p className="hero__nota ocultar-movil">
+                <span className="hero__nota-icono">
+                  <Icono nombre="destellos" tamano={18} />
+                </span>
 
-              {t.hero.subtitulo}
-            </p>
+                {t.hero.subtitulo}
+              </p>
+            )}
           </div>
 
           {/* Cartas destacadas: decoración de la portada */}

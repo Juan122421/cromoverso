@@ -141,3 +141,64 @@
 .menu-movil__sesion .boton {
   flex: 1;
 }
+.menu-movil__sesion--activa {
+  align-items: center;
+  gap: 12px;
+}
+.menu-movil__avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: 50%;
+  color: var(--texto-principal);
+  background: var(--marca-acento);
+  font-size: 0.75rem; /* Detalle/Nota fuerte */
+  font-weight: 600;
+  line-height: 1rem;
+}
+.menu-movil__usuario {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.menu-movil__nombre,
+.menu-movil__alias {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.menu-movil__nombre {
+  font-size: 1rem; /* Cuerpo/M fuerte */
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+.menu-movil__alias {
+  color: var(--texto-secundario);
+  font-size: 0.75rem; /* Detalle/Nota */
+  line-height: 1rem;
+}
+/* El botón conserva su tamaño: aquí no se reparte el ancho con otro botón */
+.menu-movil__sesion--activa .boton {
+  flex: none;
+}
+.menu-movil__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 0 16px 12px;
+  color: var(--estado-error);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+.menu-movil__error svg {
+  flex: none;
+  margin-top: 1px;
+}

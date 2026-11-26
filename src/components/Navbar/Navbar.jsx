@@ -9,14 +9,14 @@ import BotonAccesibilidad from "../BotonAccesibilidad/BotonAccesibilidad.jsx";
 import MenuMovil from "../MenuMovil/MenuMovil.jsx";
 import { usePreferencias } from "../../context/PreferenciasContext.jsx";
 import { DESTINOS } from "../../config/destinos.js";
-import CuentaNavbar from "../CuentaNavbar/CuentaNavbar.jsx";
+import MenuCuenta from "../MenuCuenta/MenuCuenta.jsx";
 import { useSesion } from "../../context/SesionContext.jsx";
 
 // tono="oscuro" pinta el encabezado móvil oscuro (portadas oscuras).
 // En escritorio el navbar siempre es blanco.
 export default function Navbar({ tono = "claro" }) {
   const { textos, cargando, error, recargar, idioma } = usePreferencias();
-  const { usuario } = useSesion();
+  const { usuario, verificando } = useSesion();
   const [abierto, setAbierto] = useState(false);
   const botonMenu = useRef(null);
   const { pathname } = useLocation();
@@ -70,8 +70,14 @@ export default function Navbar({ tono = "claro" }) {
               <BotonAccesibilidad className="solo-escritorio" />
               <SelectorIdioma className="solo-escritorio" />
 
-              {usuario ? (
-                <CuentaNavbar />
+              {verificando ? (
+                // Mientras la API confirma si hay sesión no se muestran ni los botones ni la cuenta
+                <span
+                  className="navbar__espera solo-escritorio"
+                  aria-hidden="true"
+                />
+              ) : usuario ? (
+                <MenuCuenta className="solo-escritorio" />
               ) : (
                 <>
                   <Boton variante="secundario" tamano="p" to="/ingresar">

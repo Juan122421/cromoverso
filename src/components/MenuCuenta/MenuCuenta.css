@@ -1,0 +1,146 @@
+.menu-cuenta {
+  position: relative;
+  display: inline-flex;
+  font-family: var(--fuente-rubik);
+}
+
+/* Botón · Cuenta (Figma): círculo amarillo de 40 px con las iniciales */
+.menu-cuenta__boton {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: 50%;
+  color: var(--texto-principal);
+  background: var(--marca-acento);
+  font-family: inherit;
+  font-size: 0.75rem; /* Detalle/Nota fuerte */
+  font-weight: 600;
+  line-height: 1rem;
+  cursor: pointer;
+}
+/* Hover y foco no están en Figma: son propuestas con los tokens del sistema */
+.menu-cuenta__boton:hover {
+  background: color-mix(in srgb, var(--marca-acento) 85%, var(--fondo-superficie));
+}
+.menu-cuenta__boton:focus-visible,
+.menu-cuenta__opcion:focus-visible {
+  outline: var(--anillo-foco) solid var(--marca-primario);
+  outline-offset: 3px;
+}
+
+/* Menú de cuenta (abierto): 272 px, a 7 px debajo del botón y alineado a su borde derecho */
+.menu-cuenta__panel {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 7px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+  width: 272px;
+  padding: 8px;
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: var(--radio-l);
+  color: var(--texto-principal);
+  background: var(--fondo-superficie);
+  box-shadow: var(--sombra-pop);
+}
+.menu-cuenta__panel[hidden] {
+  display: none;
+}
+
+.menu-cuenta__persona {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 12px;
+}
+.menu-cuenta__avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--texto-inverso);
+  background: var(--marca-primario);
+  font-size: 0.875rem; /* Cuerpo/P fuerte */
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+.menu-cuenta__datos {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.menu-cuenta__nombre,
+.menu-cuenta__correo {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.menu-cuenta__nombre {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+.menu-cuenta__correo {
+  color: var(--texto-secundario);
+  font-size: 0.75rem; /* Detalle/Nota */
+  line-height: 1rem;
+}
+
+.menu-cuenta__divisor {
+  height: 1px;
+  background: var(--borde-sutil);
+}
+
+.menu-cuenta__opcion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 8px;
+  border: 0;
+  border-radius: var(--radio-s);
+  color: var(--texto-principal);
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  text-align: left;
+  cursor: pointer;
+}
+.menu-cuenta__opcion:hover {
+  background: var(--fondo-sutil);
+}
+.menu-cuenta__opcion:disabled {
+  opacity: var(--opacidad-deshabilitado);
+  cursor: progress;
+}
+
+/* Si cerrar la sesión falla, el mensaje va dentro del menú (con icono, no solo color) */
+.menu-cuenta__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 8px 8px;
+  color: var(--estado-error);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+.menu-cuenta__error svg {
+  flex: none;
+  margin-top: 1px;
+}
