@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import "./Ingresar.css";
 import Aviso from "../components/Aviso/Aviso.jsx";
 import Boton from "../components/Boton/Boton.jsx";
@@ -22,7 +22,7 @@ export default function Ingresar() {
   const refCorreo = useRef(null);
   const refClave = useRef(null);
   const enviandoRef = useRef(false);
-
+  const { state: estadoRuta } = useLocation();
   const [correo, setCorreo] = useState("");
   const [clave, setClave] = useState("");
   const [recordar, setRecordar] = useState(true);
@@ -241,6 +241,9 @@ export default function Ingresar() {
             >
               {contenidoAviso.texto}
             </Aviso>
+          )}
+          {!contenidoAviso && estadoRuta?.sesionVencida && (
+            <Aviso titulo={textos?.errores?.no_autenticado} />
           )}
           {aviso?.tipo === "espera" && (
             <p className="solo-lectores" role="alert">
