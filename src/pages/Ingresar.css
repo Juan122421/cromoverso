@@ -11,15 +11,15 @@
   outline-offset: 3px;
 }
 
-/* ---------- Lado del formulario ---------- */
+/* ---------- Formulario (móvil primero: 16 px de margen y 18 px entre elementos) ---------- */
 .ingresar__lado {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: var(--espacio-5) var(--espacio-4) var(--espacio-7);
+  padding: 24px 16px 40px;
 }
 .ingresar__formulario {
-  --ingresar-separacion: 16px;
+  --ingresar-separacion: 18px;
 
   display: flex;
   flex-direction: column;
@@ -33,16 +33,16 @@
 .ingresar__titulo {
   margin: 0;
   font-family: var(--fuente-unbounded);
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.75rem; /* Titular/H2 */
+  font-weight: 600;
   line-height: 2.125rem;
   letter-spacing: -0.5px;
 }
 .ingresar__subtitulo {
   margin: 0;
   color: var(--texto-secundario);
-  font-size: 0.875rem; /* Cuerpo/P */
-  line-height: 1.25rem;
+  font-size: 1rem; /* Cuerpo/M */
+  line-height: 1.5rem;
 }
 
 .ingresar__recordar {
@@ -83,6 +83,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .ingresar__lado {
+    align-items: center;
     padding: var(--espacio-7);
   }
   .ingresar__formulario {
@@ -90,12 +91,9 @@
   }
   .ingresar__titulo {
     font-size: 2.5rem; /* Titular/H1 */
+    font-weight: 700;
     line-height: 2.875rem;
     letter-spacing: -1px;
-  }
-  .ingresar__subtitulo {
-    font-size: 1rem; /* Cuerpo/M */
-    line-height: 1.5rem;
   }
   .ingresar__recordar {
     flex-direction: row;

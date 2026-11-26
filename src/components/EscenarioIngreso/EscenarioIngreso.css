@@ -1,14 +1,18 @@
+/* Móvil primero: portada de 390 px con el abanico de 390 × 265 */
 .escenario {
-  --abanico-zoom: 0.55;
+  --abanico-ancho: 390px;
+  --abanico-alto: 265px;
+  --abanico-zoom: 1;
+  --carta-ancho: 168px;
 
   position: relative;
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-4);
+  gap: 8px;
   box-sizing: border-box;
   overflow: hidden;
-  padding: var(--espacio-5) var(--espacio-4);
+  padding: 8px 0 28px;
   color: var(--texto-inverso);
   background: var(--fondo-inverso);
   font-family: var(--fuente-rubik);
@@ -16,77 +20,61 @@
 .escenario__rayos {
   position: absolute;
   z-index: -1;
-  top: -300px;
-  left: -150px;
-  width: 820px;
-  height: 820px;
+  top: -170px;
+  left: -255px;
+  width: 900px;
+  height: 900px;
   color: color-mix(in srgb, var(--marca-primario) 30%, transparent);
   pointer-events: none;
 }
-
-/* Marca más pequeña en móvil, como en el navbar */
-.escenario .marca {
-  --marca-emblema: 28.8px;
-  --marca-estrella: 16px;
-  --marca-grosor: 1.6px;
-  --marca-fuente: 1rem;
-  --marca-linea: 1.3125rem;
-  --marca-separacion: var(--espacio-2);
-
-  align-self: flex-start;
+.escenario__encabezado {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 8px 16px;
+  box-sizing: border-box;
 }
 
-/* Abanico: lienzo de 600 × 420 px; el zoom lo ajusta a cada ancho */
+/* Abanico: lienzo con medidas de Figma; el zoom lo ajusta a cada ancho de pantalla */
 .escenario__abanico {
   position: relative;
   flex: none;
-  align-self: flex-start;
-  width: 600px;
-  height: 420px;
+  align-self: center;
+  width: var(--abanico-ancho);
+  height: var(--abanico-alto);
   zoom: var(--abanico-zoom);
 }
 .escenario__carta {
   position: absolute;
-  width: 240px;
+  width: var(--carta-ancho);
 }
 .escenario__carta--izquierda {
-  top: 41.4px;
-  left: 52.3px;
+  top: 17.6px;
+  left: 60.1px;
   z-index: 1;
-  transform: rotate(-12deg);
-}
-.escenario__carta--derecha {
-  top: 41.3px;
-  left: 282.5px;
-  z-index: 2;
-  transform: rotate(12deg);
+  transform: rotate(-10deg);
 }
 .escenario__carta--centro {
-  top: 10px;
-  left: 180px;
+  top: 13.6px;
+  left: 122.6px;
   z-index: 3;
-}
-/* En móvil el diseño solo muestra dos cartas */
-@media (max-width: 56.1875rem) {
-  .escenario__carta--derecha {
-    display: none;
-  }
+  transform: rotate(4deg);
 }
 
 .escenario__lema {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
-  max-width: 600px;
+  gap: 8px;
+  padding: 12px 16px 0;
 }
 .escenario__titulo {
   margin: 0;
   font-family: var(--fuente-unbounded);
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 2.25rem;
-  letter-spacing: -1px;
+  font-size: 1.75rem; /* Titular/H2 */
+  font-weight: 600;
+  line-height: 2.125rem;
+  letter-spacing: -0.5px;
 }
 .escenario__frase {
   display: block;
@@ -99,10 +87,20 @@
   line-height: 1.5rem;
 }
 
+/* Pantallas muy angostas: el abanico se reduce un poco para no recortarse */
+@media (max-width: 23.75rem) {
+  .escenario {
+    --abanico-zoom: 0.92;
+  }
+}
+
 /* ---------- Escritorio: mitad izquierda de la pantalla ---------- */
 @media (min-width: 56.25rem) {
   .escenario {
+    --abanico-ancho: 600px;
+    --abanico-alto: 420px;
     --abanico-zoom: 0.58;
+    --carta-ancho: 240px;
 
     justify-content: space-between;
     gap: var(--espacio-5);
@@ -114,17 +112,39 @@
     width: 1400px;
     height: 1400px;
   }
-  .escenario .marca {
-    --marca-emblema: 36px;
-    --marca-estrella: 20px;
-    --marca-grosor: var(--borde-grosor);
-    --marca-fuente: 1.25rem;
-    --marca-linea: 1.625rem;
-    --marca-separacion: 10px;
+  .escenario__encabezado {
+    min-height: 0;
+    padding: 0;
+  }
+  .escenario__abanico {
+    align-self: flex-start;
+  }
+  .escenario__carta--izquierda {
+    top: 41.4px;
+    left: 52.3px;
+    transform: rotate(-12deg);
+  }
+  .escenario__carta--derecha {
+    top: 41.3px;
+    left: 282.5px;
+    z-index: 2;
+    transform: rotate(12deg);
+  }
+  .escenario__carta--centro {
+    top: 10px;
+    left: 180px;
+    transform: none;
+  }
+  .escenario__lema {
+    gap: 14px;
+    max-width: 600px;
+    padding: 0;
   }
   .escenario__titulo {
     font-size: 2.5rem; /* Titular/H1 */
+    font-weight: 700;
     line-height: 2.875rem;
+    letter-spacing: -1px;
   }
   .escenario__texto {
     display: block;
