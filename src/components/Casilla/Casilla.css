@@ -55,3 +55,9 @@
 .casilla--error .casilla__caja {
   border: 2.5px solid var(--estado-error);
 }
+.casilla__entrada:disabled + .casilla__caja {
+  opacity: var(--opacidad-deshabilitado);
+}
+.casilla:has(.casilla__entrada:disabled) {
+  cursor: not-allowed;
+}

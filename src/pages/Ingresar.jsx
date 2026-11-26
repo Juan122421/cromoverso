@@ -26,10 +26,13 @@ export default function Ingresar() {
   const [correo, setCorreo] = useState("");
   const [clave, setClave] = useState("");
   const [recordar, setRecordar] = useState(true);
-  const [errores, setErrores] = useState({}); // mensaje junto a cada campo: { correo, clave }
-  const [aviso, setAviso] = useState(null); // { tipo: campos | credenciales | espera | conexion | servidor, ... }
+  const [errores, setErrores] = useState({});
+  // mensaje junto a cada campo: { correo, clave }
+  const [aviso, setAviso] = useState(null);
+  // { tipo: campos | credenciales | espera | conexion | servidor, ... }
   const [enviando, setEnviando] = useState(false);
-  const [espera, setEspera] = useState(0); // segundos que la API pide esperar (error 429)
+  const [espera, setEspera] = useState(0);
+  // segundos que la API pide esperar (error 429)
 
   const t = textos?.paginas?.ingresar;
   const f = t?.formulario;
@@ -38,11 +41,28 @@ export default function Ingresar() {
   // Cuenta regresiva del error 429: el botón se bloquea hasta que termina
   useEffect(() => {
     if (espera <= 0) return undefined;
-    const reloj = setTimeout(() => setEspera((segundos) => segundos - 1), 1000);
+    const reloj = setTimeout(
+      () => setEspera((segundos) => segundos - 1),
+      1000
+    );
     return () => clearTimeout(reloj);
   }, [espera]);
+
   useEffect(() => {
-    if (espera === 0) setAviso((actual) => (actual?.tipo === "espera" ? null : actual));
+    if (espera === 0) {
+      setAviso((actual) =>
+        actual?.tipo === "espera" ? null : actual
+      );
+    }
+  }, [espera]);
+
+  // Devuelve el foco al correo cuando termina la espera
+  const esperaPrevia = useRef(0);
+  useEffect(() => {
+    if (esperaPrevia.current > 0 && espera === 0) {
+      refCorreo.current?.focus();
+    }
+    esperaPrevia.current = espera;
   }, [espera]);
 
   // Con la sesión ya iniciada no hay nada que hacer aquí: se vuelve al inicio
@@ -50,7 +70,9 @@ export default function Ingresar() {
   if (!t || !f) return null;
 
   function enfocarEnviar() {
-    window.requestAnimationFrame(() => document.getElementById(ID_ENVIAR)?.focus());
+    window.requestAnimationFrame(() =>
+      document.getElementById(ID_ENVIAR)?.focus()
+    );
   }
 
   function enfocarPrimerError(problemas) {
@@ -60,11 +82,14 @@ export default function Ingresar() {
 
   function validar() {
     const problemas = {};
-    if (!correo.trim()) problemas.correo = t.errores.correoObligatorio;
-    else if (!CORREO_VALIDO.test(correo.trim())) {
+    if (!correo.trim()) {
+      problemas.correo = t.errores.correoObligatorio;
+    } else if (!CORREO_VALIDO.test(correo.trim())) {
       problemas.correo = textos?.formularios?.validacion?.correoInvalido;
     }
-    if (!clave) problemas.clave = t.errores.claveObligatoria;
+    if (!clave) {
+      problemas.clave = t.errores.claveObligatoria;
+    }
     return problemas;
   }
 
@@ -75,7 +100,9 @@ export default function Ingresar() {
     delete restantes[campo];
     setErrores(restantes);
     if (Object.keys(restantes).length === 0) {
-      setAviso((actual) => (actual?.tipo === "campos" ? null : actual));
+      setAviso((actual) =>
+        actual?.tipo === "campos" ? null : actual
+      );
     }
   }
 
@@ -89,13 +116,17 @@ export default function Ingresar() {
       enfocarEnviar();
     } else if (fallo.estado === 422) {
       const problemas = {};
-      if (fallo.campos?.correo) problemas.correo = fallo.campos.correo;
-      if (fallo.campos?.clave) problemas.clave = fallo.campos.clave;
+      if (fallo.campos?.correo) {
+        problemas.correo = fallo.campos.correo;
+      }
+      if (fallo.campos?.clave) {
+        problemas.clave = fallo.campos.clave;
+      }
       setErrores(problemas);
       setAviso({ tipo: "campos" });
       enfocarPrimerError(problemas);
     } else if (fallo.estado === 429) {
-      const segundos = fallo.reintentarEn ?? 30;
+      const segundos = Math.max(1, fallo.reintentarEn ?? 30);
       setEspera(segundos);
       setAviso({ tipo: "espera", segundos });
     } else {
@@ -104,124 +135,177 @@ export default function Ingresar() {
     }
   }
 
- async function alEnviar(evento) {
-  evento.preventDefault();
-  // Un segundo envío mientras el primero sigue en curso se ignora (aunque React aún no haya repintado)
-  if (enviandoRef.current || espera > 0) return;
+  async function alEnviar(evento) {
+    evento.preventDefault();
+    // Un segundo envío mientras el primero sigue en curso se ignora
+    // (aunque React aún no haya repintado)
+    if (enviandoRef.current || espera > 0) return;
 
-  const problemas = validar();
-  if (Object.keys(problemas).length > 0) {
-    setErrores(problemas);
-    setAviso({ tipo: "campos" });
-    enfocarPrimerError(problemas); // el foco va al primer campo con error
-    return;
-  }
+    const problemas = validar();
+    if (Object.keys(problemas).length > 0) {
+      setErrores(problemas);
+      setAviso({ tipo: "campos" });
+      enfocarPrimerError(problemas);
+      return;
+    }
 
-  setErrores({});
-  setAviso(null);
-  enviandoRef.current = true;
-  setEnviando(true);
-  try {
-    // Si todo sale bien, el contexto guarda al usuario y esta vista redirige al inicio
-    await iniciarSesion(correo.trim(), clave);
-  } catch (fallo) {
-    mostrarFallo(fallo);
-  } finally {
-    enviandoRef.current = false;
-    setEnviando(false);
+    setErrores({});
+    setAviso(null);
+    enviandoRef.current = true;
+    setEnviando(true);
+
+    try {
+      // Si todo sale bien, el contexto guarda al usuario y esta vista redirige al inicio
+      await iniciarSesion(correo.trim(), clave);
+    } catch (fallo) {
+      mostrarFallo(fallo);
+    } finally {
+      enviandoRef.current = false;
+      setEnviando(false);
+    }
   }
-}
 
   // Textos del aviso: salen de la API según el tipo de aviso
   let contenidoAviso = null;
   if (aviso) {
     const e = t.errores;
     if (aviso.tipo === "campos") {
-      contenidoAviso = { titulo: e.camposObligatorios.titulo, texto: e.camposObligatorios.texto };
+      contenidoAviso = {
+        titulo: e.camposObligatorios.titulo,
+        texto: e.camposObligatorios.texto
+      };
     } else if (aviso.tipo === "credenciales") {
-      contenidoAviso = { titulo: e.credenciales.titulo, texto: e.credenciales.texto };
+      contenidoAviso = {
+        titulo: e.credenciales.titulo,
+        texto: e.credenciales.texto
+      };
     } else if (aviso.tipo === "espera") {
       contenidoAviso = {
         titulo: e.demasiadosIntentos.titulo,
-        texto: formatear(e.demasiadosIntentos.texto, { segundos: aviso.segundos }),
+        texto: formatear(e.demasiadosIntentos.texto, {
+          segundos: espera
+        }),
       };
     } else if (aviso.tipo === "conexion") {
-      contenidoAviso = { titulo: e.conexion.titulo, texto: e.conexion.texto };
+      contenidoAviso = {
+        titulo: e.conexion.titulo,
+        texto: e.conexion.texto
+      };
     } else {
       contenidoAviso = {
         titulo: e.conexion.titulo,
-        texto: (aviso.codigo && textos.errores?.[aviso.codigo]) || textos.errores?.generico,
+        texto:
+          (aviso.codigo && textos.errores?.[aviso.codigo]) ||
+          textos.errores?.generico,
       };
     }
   }
 
   // Tras un fallo de conexión o del servidor, el botón invita a reintentar (Figma)
-  const reintentar = aviso?.tipo === "conexion" || aviso?.tipo === "servidor";
+  const reintentar =
+    aviso?.tipo === "conexion" || aviso?.tipo === "servidor";
   let textoBoton = f.botones.ingresar;
-  if (enviando) textoBoton = f.mensajes.ingresando;
-  else if (reintentar) textoBoton = t.errores.conexion.botones.reintentar;
+  if (enviando) {
+    textoBoton = f.mensajes.ingresando;
+  } else if (reintentar) {
+    textoBoton = t.errores.conexion.botones.reintentar;
+  }
 
   return (
     <div className="ingresar">
       <EscenarioIngreso presentacion={t.presentacion} />
-
       <div className="ingresar__lado">
-        <form className="ingresar__formulario" onSubmit={alEnviar} noValidate aria-busy={enviando}>
-        
+        <form
+          className="ingresar__formulario"
+          onSubmit={alEnviar}
+          noValidate
+          aria-busy={enviando}
+        >
           <div className="ingresar__logo ocultar-movil">
-            <Marca texto={textos?.navbar?.logo?.texto} aria={textos?.navbar?.logo?.aria} />
+            <Marca
+              texto={textos?.navbar?.logo?.texto}
+              aria={textos?.navbar?.logo?.aria}
+            />
           </div>
-          <h1 className="ingresar__titulo">{f.titulo}</h1>
-          <p className="ingresar__subtitulo">{f.subtitulo}</p>
-
-          {contenidoAviso && <Aviso titulo={contenidoAviso.titulo}>{contenidoAviso.texto}</Aviso>}
-
-          <Campo
-            id="ingresar-correo"
-            etiqueta={f.etiquetas.correo}
-            tipo="email"
-            valor={correo}
-            onChange={(evento) => {
-              setCorreo(evento.target.value);
-              limpiarError("correo");
-            }}
-            placeholder={f.placeholders.correo}
-            error={errores.correo}
-            inputRef={refCorreo}
-            autoComplete="email"
-            inputMode="email"
-            autoCapitalize="none"
-            spellCheck={false}
-          />
-
-          <CampoClave
-            id="ingresar-clave"
-            etiqueta={f.etiquetas.clave}
-            valor={clave}
-            onChange={(evento) => {
-              setClave(evento.target.value);
-              limpiarError("clave");
-            }}
-            error={errores.clave}
-            inputRef={refClave}
-            autoComplete="current-password"
-            textoMostrar={f.botones.mostrarClave}
-            textoOcultar={f.botones.ocultarClave}
-          />
-
-          <div className="ingresar__recordar">
-            <Casilla
-              id="ingresar-recordar"
-              checked={recordar}
-              onChange={(evento) => setRecordar(evento.target.checked)}
+          <h1 className="ingresar__titulo">
+            {f.titulo}
+          </h1>
+          <p className="ingresar__subtitulo">
+            {f.subtitulo}
+          </p>
+          {/* Aviso visible y anuncio para lectores de pantalla */}
+          {contenidoAviso && (
+            <Aviso
+              titulo={contenidoAviso.titulo}
+              anunciar={aviso.tipo !== "espera"}
             >
-              {f.etiquetas.mantenerSesion}
-            </Casilla>
-            <Link className="ingresar__enlace" to="/recuperar-clave">
-              {f.enlaces.olvidasteClave}
-            </Link>
-          </div>
-
+              {contenidoAviso.texto}
+            </Aviso>
+          )}
+          {aviso?.tipo === "espera" && (
+            <p className="solo-lectores" role="alert">
+              {`${t.errores.demasiadosIntentos.titulo}. ${
+                formatear(t.errores.demasiadosIntentos.texto, {
+                  segundos: espera
+                })
+              }`}
+            </p>
+          )}
+          {/* Los campos se deshabilitan durante la espera */}
+          <fieldset
+            className="ingresar__campos"
+            disabled={espera > 0}
+          >
+            <Campo
+              id="ingresar-correo"
+              etiqueta={f.etiquetas.correo}
+              tipo="email"
+              valor={correo}
+              onChange={(evento) => {
+                setCorreo(evento.target.value);
+                limpiarError("correo");
+              }}
+              placeholder={f.placeholders.correo}
+              error={errores.correo}
+              inputRef={refCorreo}
+              autoComplete="email"
+              inputMode="email"
+              autoCapitalize="none"
+              spellCheck={false}
+            />
+            <CampoClave
+              id="ingresar-clave"
+              etiqueta={f.etiquetas.clave}
+              valor={clave}
+              onChange={(evento) => {
+                setClave(evento.target.value);
+                limpiarError("clave");
+              }}
+              error={errores.clave}
+              inputRef={refClave}
+              autoComplete="current-password"
+              textoMostrar={f.botones.mostrarClave}
+              textoOcultar={f.botones.ocultarClave}
+            />
+            <div className="ingresar__recordar">
+              <Casilla
+                id="ingresar-recordar"
+                checked={recordar}
+                onChange={(evento) =>
+                  setRecordar(evento.target.checked)
+                }
+              >
+                {f.etiquetas.mantenerSesion}
+              </Casilla>
+              <Link
+                className="ingresar__enlace"
+                to="/recuperar-clave"
+              >
+                {f.enlaces.olvidasteClave}
+              </Link>
+            </div>
+          </fieldset>
+          {/* El botón permanece fuera del fieldset */}
           <Boton
             id={ID_ENVIAR}
             type="submit"
@@ -232,10 +316,15 @@ export default function Ingresar() {
           >
             {textoBoton}
           </Boton>
-
+          {/* El enlace para crear cuenta también permanece fuera */}
           <p className="ingresar__crear">
-            <span>{f.mensajes.sinCuenta}</span>
-            <Link className="ingresar__enlace" to="/registro">
+            <span>
+              {f.mensajes.sinCuenta}
+            </span>
+            <Link
+              className="ingresar__enlace"
+              to="/registro"
+            >
               {f.enlaces.crearCuenta}
             </Link>
           </p>
