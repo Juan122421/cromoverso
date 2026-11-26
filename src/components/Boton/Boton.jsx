@@ -10,6 +10,7 @@ export default function Boton({
   icono,
   iconoAlFinal = false, // true: el icono va después del texto
   deshabilitado = false,
+  cargando = false, // enviando: deshabilitado, con indicador y aria-busy
   to, // ruta interna del router: "/ingresar"
   href, // enlace externo o ancla
   type = "button",
@@ -17,10 +18,12 @@ export default function Boton({
   children,
   ...resto
 }) {
-  const clases = `boton boton--${variante} boton--${tamano} ${className}`.trim();
-  const iconoJsx = icono ? <Icono nombre={icono} tamano={TAMANO_ICONO[tamano]} /> : null;
+  const clases = `boton boton--${variante} boton--${tamano}${cargando ? " boton--cargando" : ""} ${className}`.trim();
+  const iconoJsx =
+    icono && !cargando ? <Icono nombre={icono} tamano={TAMANO_ICONO[tamano]} /> : null;
   const contenido = (
     <>
+      {cargando && <span className="boton__indicador" aria-hidden="true" />}
       {!iconoAlFinal && iconoJsx}
       {children}
       {iconoAlFinal && iconoJsx}
@@ -49,7 +52,13 @@ export default function Boton({
   }
 
   return (
-    <button className={clases} type={type} disabled={deshabilitado} {...resto}>
+    <button
+      className={clases}
+      type={type}
+      disabled={deshabilitado || cargando}
+      aria-busy={cargando || undefined}
+      {...resto}
+    >
       {contenido}
     </button>
   );

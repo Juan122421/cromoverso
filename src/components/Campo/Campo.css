@@ -1,0 +1,87 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--fuente-rubik);
+}
+.campo__etiqueta {
+  color: var(--texto-principal);
+  font-size: 0.875rem; /* Cuerpo/P fuerte */
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+.campo__control {
+  position: relative;
+  display: flex;
+}
+.campo__entrada {
+  box-sizing: border-box;
+  width: 100%;
+  height: 48px;
+  padding: 12px 16px;
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: var(--radio-m);
+  color: var(--texto-principal);
+  background: var(--fondo-superficie);
+  font-family: inherit;
+  font-size: 1rem; /* Cuerpo/M */
+  line-height: 1.5rem;
+}
+.campo__entrada::placeholder {
+  color: var(--texto-terciario);
+  opacity: 1;
+}
+/* El foco no está en Figma: es una propuesta con el anillo del sistema de diseño */
+.campo__entrada:focus-visible {
+  outline: var(--anillo-foco) solid var(--marca-primario);
+  outline-offset: 2px;
+}
+.campo__entrada--con-accion {
+  padding-right: 52px;
+}
+.campo--error .campo__entrada {
+  border: 2.5px solid var(--estado-error);
+}
+
+/* Mensaje: la ayuda es neutra; el error lleva icono y color de error (nunca solo color) */
+.campo__mensaje {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 0.75rem; /* Detalle/Nota */
+  line-height: 1rem;
+}
+.campo__mensaje--error {
+  color: var(--estado-error);
+}
+.campo__mensaje svg {
+  flex: none;
+}
+
+/* Botón del ojo: 36 px, dentro de la caja a 8 px del borde derecho */
+.campo__ver {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  color: var(--texto-secundario);
+  background: transparent;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background-color var(--transicion-rapida);
+}
+.campo__ver:hover {
+  background: var(--fondo-sutil);
+}
+.campo__ver:focus-visible {
+  outline: var(--anillo-foco) solid var(--marca-primario);
+  outline-offset: 1px;
+}

@@ -1,0 +1,57 @@
+.casilla {
+  --casilla-caja: 22px;
+  --casilla-area: 44px;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--texto-principal);
+  font-family: var(--fuente-rubik);
+  font-size: 0.875rem; /* Cuerpo/P */
+  line-height: 1.25rem;
+  cursor: pointer;
+}
+.casilla__entrada {
+  position: absolute;
+  top: 50%;
+  left: calc((var(--casilla-caja) - var(--casilla-area)) / 2);
+  width: var(--casilla-area);
+  height: var(--casilla-area);
+  margin: 0;
+  opacity: 0;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+.casilla__caja {
+  display: grid;
+  flex: none;
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--casilla-caja);
+  height: var(--casilla-caja);
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: 6px;
+  color: var(--texto-inverso);
+  background: var(--fondo-superficie);
+}
+.casilla__caja svg {
+  visibility: hidden;
+}
+.casilla__caja svg,
+.casilla__caja svg * {
+  stroke-width: 3;
+}
+.casilla__entrada:checked + .casilla__caja {
+  background: var(--marca-primario);
+}
+.casilla__entrada:checked + .casilla__caja svg {
+  visibility: visible;
+}
+.casilla__entrada:focus-visible + .casilla__caja {
+  outline: var(--anillo-foco) solid var(--marca-primario);
+  outline-offset: 2px;
+}
+.casilla--error .casilla__caja {
+  border: 2.5px solid var(--estado-error);
+}

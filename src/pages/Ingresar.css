@@ -1,0 +1,105 @@
+.ingresar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 100dvh;
+  color: var(--texto-principal);
+  background: var(--fondo-pagina);
+  font-family: var(--fuente-rubik);
+}
+.ingresar :focus-visible {
+  outline: var(--anillo-foco) solid var(--marca-primario);
+  outline-offset: 3px;
+}
+
+/* ---------- Lado del formulario ---------- */
+.ingresar__lado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espacio-5) var(--espacio-4) var(--espacio-7);
+}
+.ingresar__formulario {
+  --ingresar-separacion: 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--ingresar-separacion);
+  width: 100%;
+  max-width: 440px;
+}
+.ingresar__logo {
+  align-self: flex-start;
+}
+.ingresar__titulo {
+  margin: 0;
+  font-family: var(--fuente-unbounded);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 2.125rem;
+  letter-spacing: -0.5px;
+}
+.ingresar__subtitulo {
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 0.875rem; /* Cuerpo/P */
+  line-height: 1.25rem;
+}
+
+.ingresar__recordar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+}
+.ingresar__enlace {
+  color: var(--texto-marca);
+  font-size: 0.875rem; /* Cuerpo/P fuerte */
+  font-weight: 600;
+  line-height: 1.25rem;
+  text-decoration: underline;
+}
+.ingresar__enlace:hover {
+  color: var(--texto-marca);
+  text-decoration-thickness: 2px;
+}
+.ingresar__enviar {
+  width: 100%;
+}
+.ingresar__crear {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0 6px;
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* ---------- Escritorio: pantalla dividida ---------- */
+@media (min-width: 56.25rem) {
+  .ingresar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ingresar__lado {
+    padding: var(--espacio-7);
+  }
+  .ingresar__formulario {
+    --ingresar-separacion: 20px;
+  }
+  .ingresar__titulo {
+    font-size: 2.5rem; /* Titular/H1 */
+    line-height: 2.875rem;
+    letter-spacing: -1px;
+  }
+  .ingresar__subtitulo {
+    font-size: 1rem; /* Cuerpo/M */
+    line-height: 1.5rem;
+  }
+  .ingresar__recordar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

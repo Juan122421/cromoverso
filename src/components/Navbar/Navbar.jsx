@@ -9,15 +9,20 @@ import BotonAccesibilidad from "../BotonAccesibilidad/BotonAccesibilidad.jsx";
 import MenuMovil from "../MenuMovil/MenuMovil.jsx";
 import { usePreferencias } from "../../context/PreferenciasContext.jsx";
 import { DESTINOS } from "../../config/destinos.js";
+import CuentaNavbar from "../CuentaNavbar/CuentaNavbar.jsx";
+import { useSesion } from "../../context/SesionContext.jsx";
 
 // tono="oscuro" pinta el encabezado móvil oscuro (portadas oscuras).
 // En escritorio el navbar siempre es blanco.
 export default function Navbar({ tono = "claro" }) {
   const { textos, cargando, error, recargar, idioma } = usePreferencias();
+  const { usuario } = useSesion();
   const [abierto, setAbierto] = useState(false);
   const botonMenu = useRef(null);
   const { pathname } = useLocation();
+
   const cerrarMenu = useCallback(() => setAbierto(false), []);
+
   const nav = textos?.navbar;
   const ingles = idioma === "en";
 
@@ -26,14 +31,19 @@ export default function Navbar({ tono = "claro" }) {
     setAbierto(false);
   }, [pathname]);
 
-  const enlaces = Object.keys(DESTINOS).filter((clave) => nav?.enlaces?.[clave]);
+  const enlaces = Object.keys(DESTINOS).filter(
+    (clave) => nav?.enlaces?.[clave]
+  );
 
   return (
     <>
       <header className={`navbar navbar--${tono}`}>
         <div className="navbar__interior">
           <div className="navbar__izquierda">
-            <Marca texto={nav?.logo?.texto ?? "cromoverso"} aria={nav?.logo?.aria} />
+            <Marca
+              texto={nav?.logo?.texto ?? "cromoverso"}
+              aria={nav?.logo?.aria}
+            />
 
             {nav && (
               <nav className="navbar__enlaces solo-escritorio">
@@ -59,12 +69,25 @@ export default function Navbar({ tono = "claro" }) {
             <div className="navbar__derecha">
               <BotonAccesibilidad className="solo-escritorio" />
               <SelectorIdioma className="solo-escritorio" />
-              <Boton variante="secundario" tamano="p" to="/ingresar">
-                {nav.botones.ingresar}
-              </Boton>
-              <Boton tamano="p" to="/registro" className="solo-escritorio">
-                {nav.botones.crearCuenta}
-              </Boton>
+
+              {usuario ? (
+                <CuentaNavbar />
+              ) : (
+                <>
+                  <Boton variante="secundario" tamano="p" to="/ingresar">
+                    {nav.botones.ingresar}
+                  </Boton>
+
+                  <Boton
+                    tamano="p"
+                    to="/registro"
+                    className="solo-escritorio"
+                  >
+                    {nav.botones.crearCuenta}
+                  </Boton>
+                </>
+              )}
+
               <button
                 ref={botonMenu}
                 type="button"
@@ -80,11 +103,25 @@ export default function Navbar({ tono = "claro" }) {
           ) : (
             // Excepción a "ningún texto escrito a mano": sin respuesta de la API no hay de dónde sacarlos
             <div className="navbar__estado">
-              {cargando && <p role="status">{ingles ? "Loading…" : "Cargando…"}</p>}
+              {cargando && (
+                <p role="status">
+                  {ingles ? "Loading…" : "Cargando…"}
+                </p>
+              )}
+
               {error && (
                 <div role="alert">
-                  <p>{ingles ? "Navigation could not be loaded." : "No pudimos cargar el menú."}</p>
-                  <Boton variante="secundario" tamano="p" onClick={recargar}>
+                  <p>
+                    {ingles
+                      ? "Navigation could not be loaded."
+                      : "No pudimos cargar el menú."}
+                  </p>
+
+                  <Boton
+                    variante="secundario"
+                    tamano="p"
+                    onClick={recargar}
+                  >
                     {ingles ? "Try again" : "Reintentar"}
                   </Boton>
                 </div>
@@ -94,7 +131,13 @@ export default function Navbar({ tono = "claro" }) {
         </div>
       </header>
 
-      {nav && <MenuMovil abierto={abierto} onCerrar={cerrarMenu} botonRef={botonMenu} />}
+      {nav && (
+        <MenuMovil
+          abierto={abierto}
+          onCerrar={cerrarMenu}
+          botonRef={botonMenu}
+        />
+      )}
     </>
   );
 }

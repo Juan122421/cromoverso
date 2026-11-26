@@ -1,0 +1,36 @@
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  border: var(--borde-grosor) solid var(--borde-fuerte);
+  border-radius: var(--radio-l);
+  background: var(--estado-error-suave);
+  font-family: var(--fuente-rubik);
+}
+.aviso__icono {
+  display: flex;
+  flex: none;
+  color: var(--estado-error);
+}
+.aviso__contenido {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.aviso__titulo {
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 0.875rem; /* Cuerpo/P fuerte */
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+.aviso__texto {
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 0.875rem; /* Cuerpo/P */
+  line-height: 1.25rem;
+}
