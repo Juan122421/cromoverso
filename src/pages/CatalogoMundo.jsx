@@ -21,7 +21,9 @@ import { useMediaQuery } from "../hooks/useMediaQuery.js";
 import { useTitulo } from "../hooks/useTitulo.js";
 import { pedir } from "../services/api.js";
 import { formatear, plural } from "../utils/formatear.js";
-import EsqueletoCatalogo, { EsqueletoCartas } from "../components/EsqueletoCatalogo/EsqueletoCatalogo.jsx";
+import EsqueletoCatalogo, {
+  EsqueletoCartas,
+} from "../components/EsqueletoCatalogo/EsqueletoCatalogo.jsx";
 import EsqueletoDetalle from "../components/EsqueletoDetalle/EsqueletoDetalle.jsx";
 import EstadoError from "../components/EstadoError/EstadoError.jsx";
 import EstadoVista from "../components/EstadoVista/EstadoVista.jsx";
@@ -33,7 +35,10 @@ const TIPOS = ["heroe", "aliado", "villano"];
 
 const rellenar = (numero) => String(numero).padStart(3, "0");
 const normalizar = (texto) =>
-  texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
 
 // Mundo (con sus 20 cromos), lista de mundos y rarezas
 async function cargarBase(id, signal) {
@@ -68,7 +73,9 @@ export default function CatalogoMundo() {
   // En /cromos/:cromoId se pide el cromo; en /mundos/:id no hay nada que pedir
   const detalle = useDatos(
     (signal) =>
-      cromoId ? pedir(`/cromos/${encodeURIComponent(cromoId)}`, signal) : Promise.resolve(null),
+      cromoId
+        ? pedir(`/cromos/${encodeURIComponent(cromoId)}`, signal)
+        : Promise.resolve(null),
     [cromoId],
   );
   const cromo = cromoId ? detalle.datos : null;
@@ -84,8 +91,12 @@ export default function CatalogoMundo() {
 
   const tDetalle = textos?.paginas?.detalleCromo;
   useTitulo(
-    cromo && tDetalle ? formatear(tDetalle.seo.titulo, { nombre: cromo.nombre }) : null,
-    cromo && tDetalle ? formatear(tDetalle.seo.descripcion, { poder: cromo.poder }) : null,
+    cromo && tDetalle
+      ? formatear(tDetalle.seo.titulo, { nombre: cromo.nombre })
+      : null,
+    cromo && tDetalle
+      ? formatear(tDetalle.seo.descripcion, { poder: cromo.poder })
+      : null,
   );
 
   // La vista se puede dibujar cuando llegaron los datos del mundo y los textos de la API
@@ -100,7 +111,8 @@ export default function CatalogoMundo() {
   const cerrar = useCallback(() => {
     // Si se llegó desde el catálogo, se vuelve atrás; si no, al catálogo de su mundo (o al inicio)
     if (state?.desdeCatalogo) navigate(-1);
-    else if (mundoId) navigate({ pathname: `/mundos/${mundoId}`, search }, { replace: true });
+    else if (mundoId)
+      navigate({ pathname: `/mundos/${mundoId}`, search }, { replace: true });
     else navigate("/", { replace: true });
   }, [state, navigate, mundoId, search]);
 
@@ -113,7 +125,8 @@ export default function CatalogoMundo() {
   const estados = textos?.estados;
 
   // Un mundo o un cromo que no existe: página de no encontrado
-  if ((cromoId && detalle.codigo === 404) || base.codigo === 404) return <NoEncontrado />;
+  if ((cromoId && detalle.codigo === 404) || base.codigo === 404)
+    return <NoEncontrado />;
 
   // La API falló: error con su mensaje y botón para reintentar
   const fallo = (cromoId && detalle.fallo) || base.fallo;
@@ -133,20 +146,30 @@ export default function CatalogoMundo() {
   }
 
   // Cargando el catálogo: esqueleto de la página completa
-  if (!cromoId && !preparado) return <EsqueletoCatalogo texto={estados?.cargando} />;
+  if (!cromoId && !preparado)
+    return <EsqueletoCatalogo texto={estados?.cargando} />;
 
   // Vecinos del cromo dentro del mismo mundo (en el primero no hay anterior; en el último, siguiente)
   const cromosDelMundo = cargada?.mundo.cromos ?? [];
-  const posicion = cromo ? cromosDelMundo.findIndex((item) => item.id === cromo.id) : -1;
+  const posicion = cromo
+    ? cromosDelMundo.findIndex((item) => item.id === cromo.id)
+    : -1;
   const anterior = posicion > 0 ? cromosDelMundo[posicion - 1] : null;
   const siguiente =
-    posicion >= 0 && posicion < cromosDelMundo.length - 1 ? cromosDelMundo[posicion + 1] : null;
+    posicion >= 0 && posicion < cromosDelMundo.length - 1
+      ? cromosDelMundo[posicion + 1]
+      : null;
 
   return (
     <>
       {preparado && (
         <div ref={fondo}>
-          <Catalogo key={mundoId} mundoId={mundoId} base={cargada} sinTitulo={Boolean(cromoId)} />
+          <Catalogo
+            key={mundoId}
+            mundoId={mundoId}
+            base={cargada}
+            sinTitulo={Boolean(cromoId)}
+          />
         </div>
       )}
 
@@ -185,7 +208,9 @@ function Catalogo({ mundoId, base, sinTitulo }) {
   const [busqueda, setBusqueda] = useState("");
 
   // Los filtros viven en la URL: ?rareza=legendaria&tipo=villano
-  const rareza = RAREZAS.includes(params.get("rareza")) ? params.get("rareza") : "";
+  const rareza = RAREZAS.includes(params.get("rareza"))
+    ? params.get("rareza")
+    : "";
   const tipo = TIPOS.includes(params.get("tipo")) ? params.get("tipo") : "";
 
   const lista = useDatos(
@@ -201,13 +226,16 @@ function Catalogo({ mundoId, base, sinTitulo }) {
   // Si el detalle está abierto, el título lo pone el detalle
   useTitulo(
     !sinTitulo && t ? formatear(t.seo.titulo, { mundo: mundo.nombre }) : null,
-    !sinTitulo && t ? formatear(t.seo.descripcion, { mundo: mundo.nombre }) : null,
+    !sinTitulo && t
+      ? formatear(t.seo.descripcion, { mundo: mundo.nombre })
+      : null,
   );
 
   // Cuántos cromos hay de cada tipo (se cuentan sobre los 20 del mundo)
   const porTipo = useMemo(() => {
     const cuenta = {};
-    for (const cromo of mundo.cromos ?? []) cuenta[cromo.tipo] = (cuenta[cromo.tipo] ?? 0) + 1;
+    for (const cromo of mundo.cromos ?? [])
+      cuenta[cromo.tipo] = (cuenta[cromo.tipo] ?? 0) + 1;
     return cuenta;
   }, [mundo]);
 
@@ -216,15 +244,18 @@ function Catalogo({ mundoId, base, sinTitulo }) {
   // Legendaria primero, como en el diseño
   const rarezas = [...base.rarezas].reverse();
   const infoRareza = (rid) => base.rarezas.find((item) => item.id === rid);
-  const palabraRareza = (rid) => palabras?.rarezas?.[rid] ?? infoRareza(rid)?.nombre ?? rid;
-  const palabraTipo = (tid) => t.filtros.tipo.opciones?.[tid] ?? palabras?.tipos?.[tid] ?? tid;
+  const palabraRareza = (rid) =>
+    palabras?.rarezas?.[rid] ?? infoRareza(rid)?.nombre ?? rid;
+  const palabraTipo = (tid) =>
+    t.filtros.tipo.opciones?.[tid] ?? palabras?.tipos?.[tid] ?? tid;
 
   const cromos = lista.datos?.datos ?? [];
   const termino = escritorio ? "" : normalizar(busqueda.trim());
   const visibles = termino
     ? cromos.filter(
         (cromo) =>
-          normalizar(cromo.nombre).includes(termino) || rellenar(cromo.numero).includes(termino),
+          normalizar(cromo.nombre).includes(termino) ||
+          rellenar(cromo.numero).includes(termino),
       )
     : cromos;
   const hayFiltros = Boolean(rareza || tipo || termino);
@@ -258,7 +289,11 @@ function Catalogo({ mundoId, base, sinTitulo }) {
       textos?.general?.formatos?.numeroYNombre ?? "{numero} {nombre}",
       { numero: rellenar(cromo.numero), nombre: cromo.nombre },
     );
-    return [numeroYNombre, palabraRareza(cromo.rareza), palabraTipo(cromo.tipo)].join(", ");
+    return [
+      numeroYNombre,
+      palabraRareza(cromo.rareza),
+      palabraTipo(cromo.tipo),
+    ].join(", ");
   }
 
   /* ---------- Cabeceras ---------- */
@@ -285,7 +320,11 @@ function Catalogo({ mundoId, base, sinTitulo }) {
     <header className="catalogo__cabecera catalogo__cabecera--movil">
       <Rayos className="catalogo__rayos" aria-hidden="true" focusable="false" />
       <div className="catalogo__encabezado">
-        <Link className="catalogo__circulo" to="/" aria-label={acciones?.volver}>
+        <Link
+          className="catalogo__circulo"
+          to="/"
+          aria-label={acciones?.volver}
+        >
           <Icono nombre="flechaIzq" tamano={22} />
         </Link>
         <div className="catalogo__nombres">
@@ -346,13 +385,19 @@ function Catalogo({ mundoId, base, sinTitulo }) {
                 >
                   <span className="catalogo__mundo-fila">
                     <span className="catalogo__punto" aria-hidden="true" />
-                    <span className="catalogo__mundo-nombre">{item.nombre}</span>
+                    <span className="catalogo__mundo-nombre">
+                      {item.nombre}
+                    </span>
                     <span className="catalogo__mundo-cantidad">
-                      {formatear(t.mundos.cromos, { cantidad: item.totalCromos })}
+                      {formatear(t.mundos.cromos, {
+                        cantidad: item.totalCromos,
+                      })}
                     </span>
                   </span>
                   {activo && (
-                    <span className="catalogo__mundo-actual">{t.mundos.aria.paginaActual}</span>
+                    <span className="catalogo__mundo-actual">
+                      {t.mundos.aria.paginaActual}
+                    </span>
                   )}
                 </Link>
               </li>
@@ -374,7 +419,11 @@ function Catalogo({ mundoId, base, sinTitulo }) {
                 aria-pressed={rareza === item.id}
                 onClick={() => cambiarFiltro("rareza", item.id)}
               >
-                <EtiquetaRareza rareza={item.id} icono={item.icono} texto={palabraRareza(item.id)} />
+                <EtiquetaRareza
+                  rareza={item.id}
+                  icono={item.icono}
+                  texto={palabraRareza(item.id)}
+                />
                 <span className="catalogo__filtro-cantidad">
                   {plural(t.filtros.cantidad, mundo.porRareza?.[item.id] ?? 0)}
                 </span>
@@ -397,7 +446,9 @@ function Catalogo({ mundoId, base, sinTitulo }) {
                 aria-pressed={tipo === item}
                 onClick={() => cambiarFiltro("tipo", item)}
               >
-                <span className="catalogo__filtro-nombre">{palabraTipo(item)}</span>
+                <span className="catalogo__filtro-nombre">
+                  {palabraTipo(item)}
+                </span>
                 <span className="catalogo__filtro-cantidad">
                   {plural(t.filtros.cantidad, porTipo[item] ?? 0)}
                 </span>
@@ -414,11 +465,16 @@ function Catalogo({ mundoId, base, sinTitulo }) {
     <div className="catalogo__filtros-movil">
       <label className="catalogo__select">
         <span className="solo-lectores">{t.filtros.rareza.titulo}</span>
-        <select value={rareza} onChange={(evento) => cambiarFiltro("rareza", evento.target.value)}>
+        <select
+          value={rareza}
+          onChange={(evento) => cambiarFiltro("rareza", evento.target.value)}
+        >
           <option value="">{t.filtros.rareza.todas}</option>
           {rarezas.map((item) => (
             <option key={item.id} value={item.id}>
-              {formatear(t.filtros.rareza.valor, { rareza: palabraRareza(item.id) })}
+              {formatear(t.filtros.rareza.valor, {
+                rareza: palabraRareza(item.id),
+              })}
             </option>
           ))}
         </select>
@@ -426,7 +482,10 @@ function Catalogo({ mundoId, base, sinTitulo }) {
       </label>
       <label className="catalogo__select">
         <span className="solo-lectores">{t.filtros.tipo.titulo}</span>
-        <select value={tipo} onChange={(evento) => cambiarFiltro("tipo", evento.target.value)}>
+        <select
+          value={tipo}
+          onChange={(evento) => cambiarFiltro("tipo", evento.target.value)}
+        >
           <option value="">{t.filtros.tipo.todos}</option>
           {TIPOS.map((item) => (
             <option key={item} value={item}>
@@ -464,7 +523,7 @@ function Catalogo({ mundoId, base, sinTitulo }) {
 
         <section className="catalogo__album" aria-label={mundo.nombre}>
           {escritorio ? herramientas : filtrosMovil}
-                    {/* Anuncia a los lectores de pantalla cuántos cromos coinciden */}
+          {/* Anuncia a los lectores de pantalla cuántos cromos coinciden */}
           <p className="solo-lectores" role="status">
             {lista.datos && !lista.cargando && !lista.fallo
               ? plural(t.filtros.cantidad, visibles.length)
@@ -484,7 +543,10 @@ function Catalogo({ mundoId, base, sinTitulo }) {
 
             {/* Error: el mensaje sale de errores[codigo] y el botón vuelve a pedir los cromos */}
             {!lista.cargando && lista.fallo && (
-              <EstadoError fallo={lista.fallo} onReintentar={lista.reintentar} />
+              <EstadoError
+                fallo={lista.fallo}
+                onReintentar={lista.reintentar}
+              />
             )}
 
             {/* Resultados */}
@@ -495,7 +557,10 @@ function Catalogo({ mundoId, base, sinTitulo }) {
                     {/* Cada cromo abre su detalle (/cromos/:id) y conserva los filtros de la URL */}
                     <Link
                       className="catalogo__cromo"
-                      to={{ pathname: `/cromos/${cromo.id}`, search: params.toString() }}
+                      to={{
+                        pathname: `/cromos/${cromo.id}`,
+                        search: params.toString(),
+                      }}
                       state={{ desdeCatalogo: true, mundo: mundo.id }}
                       data-cromo={cromo.id}
                       aria-label={nombreDeCromo(cromo)}
@@ -517,18 +582,21 @@ function Catalogo({ mundoId, base, sinTitulo }) {
             )}
 
             {/* Vacío: ningún cromo coincide con los filtros */}
-            {!lista.cargando && !lista.fallo && lista.datos && visibles.length === 0 && (
-              <EstadoVista
-                rol="status"
-                icono="filtro"
-                titulo={t.vacio.titulo}
-                texto={t.vacio.texto}
-              >
-                <Boton variante="secundario" onClick={quitarFiltros}>
-                  {t.vacio.botones.limpiar}
-                </Boton>
-              </EstadoVista>
-            )}
+            {!lista.cargando &&
+              !lista.fallo &&
+              lista.datos &&
+              visibles.length === 0 && (
+                <EstadoVista
+                  rol="status"
+                  icono="filtro"
+                  titulo={t.vacio.titulo}
+                  texto={t.vacio.texto}
+                >
+                  <Boton variante="secundario" onClick={quitarFiltros}>
+                    {t.vacio.botones.limpiar}
+                  </Boton>
+                </EstadoVista>
+              )}
           </div>
         </section>
       </div>
