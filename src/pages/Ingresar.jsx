@@ -21,6 +21,7 @@ export default function Ingresar() {
   const { usuario, iniciarSesion } = useSesion();
   const refCorreo = useRef(null);
   const refClave = useRef(null);
+  const enviandoRef = useRef(false);
 
   const [correo, setCorreo] = useState("");
   const [clave, setClave] = useState("");
@@ -103,30 +104,33 @@ export default function Ingresar() {
     }
   }
 
-  async function alEnviar(evento) {
-    evento.preventDefault();
-    if (enviando || espera > 0) return;
+ async function alEnviar(evento) {
+  evento.preventDefault();
+  // Un segundo envío mientras el primero sigue en curso se ignora (aunque React aún no haya repintado)
+  if (enviandoRef.current || espera > 0) return;
 
-    const problemas = validar();
-    if (Object.keys(problemas).length > 0) {
-      setErrores(problemas);
-      setAviso({ tipo: "campos" });
-      enfocarPrimerError(problemas); // el foco va al primer campo con error
-      return;
-    }
-
-    setErrores({});
-    setAviso(null);
-    setEnviando(true);
-    try {
-      // Si todo sale bien, el contexto guarda al usuario y esta vista redirige al inicio
-      await iniciarSesion(correo.trim(), clave);
-    } catch (fallo) {
-      mostrarFallo(fallo);
-    } finally {
-      setEnviando(false);
-    }
+  const problemas = validar();
+  if (Object.keys(problemas).length > 0) {
+    setErrores(problemas);
+    setAviso({ tipo: "campos" });
+    enfocarPrimerError(problemas); // el foco va al primer campo con error
+    return;
   }
+
+  setErrores({});
+  setAviso(null);
+  enviandoRef.current = true;
+  setEnviando(true);
+  try {
+    // Si todo sale bien, el contexto guarda al usuario y esta vista redirige al inicio
+    await iniciarSesion(correo.trim(), clave);
+  } catch (fallo) {
+    mostrarFallo(fallo);
+  } finally {
+    enviandoRef.current = false;
+    setEnviando(false);
+  }
+}
 
   // Textos del aviso: salen de la API según el tipo de aviso
   let contenidoAviso = null;
